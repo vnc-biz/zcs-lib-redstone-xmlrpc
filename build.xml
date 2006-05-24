@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+	Copyright (c) 2005 Redstone Handelsbolag
+	
+	This library is free software; you can redistribute it and/or modify it under the terms
+	of the GNU Lesser General Public License as published by the Free Software Foundation;
+	either version 2.1 of the License, or (at your option) any later version.
+	
+	This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+	without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+	See the GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License along with this
+	library; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+	Boston, MA  02111-1307  USA
+	
+	Original version written by Toby Allsopp (toby.allsopp@peace.com), courtesy of
+	Peace Software International (http://www.peace.com).	
+-->
+
+<project name="xmlrpc" default="jars">
+
+    <property name="src.dir" value="${basedir}/source"/>
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.jars.dir" value="${build.dir}/lib"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
+
+    <path id="build.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="javax.servlet.jar"/>
+        </fileset>
+    </path>
+	
+    <target name="jars" depends="compile">
+        <mkdir dir="${build.jars.dir}"/>
+        <!-- Full JAR with classes for both client and server, including JSON support. -->
+        <jar jarfile="${build.jars.dir}/xmlrpc.jar">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+            <fileset dir="${src.dir}">
+                <include name="**/*.properties"/>
+            </fileset>
+        </jar>
+        <!-- Client JAR with classes for client only, and no JSON support. -->
+        <jar jarfile="${build.jars.dir}/xmlrpc-client.jar">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/Base64.class"/>
+                <include name="**/XmlRpcArray.class"/>
+                <include name="**/XmlRpcStruct.class"/>
+                <include name="**/XmlRpcMessages.class"/>
+                <include name="**/XmlRpcClient*.class"/>
+                <include name="**/XmlRpcProxy.class"/>
+                <include name="**/XmlRpcException.class"/>
+                <include name="**/XmlRpcFault.class"/>
+                <include name="**/XmlRpcException.class"/>
+                <include name="**/XmlRpcParser.class"/>
+                <include name="**/XmlRpcSerializer.class"/>
+                <include name="redstone/xmlrpc/serializers/*.class"/>
+            </fileset>
+            <fileset dir="${src.dir}">
+                <include name="**/*.properties"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${build.classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.classes.dir}" classpathref="build.classpath"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+    
+</project>
