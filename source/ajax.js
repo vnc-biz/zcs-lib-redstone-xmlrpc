@@ -75,6 +75,11 @@ function Connection()
         self.xmlHttpRequest.send( content );
         return self.xmlHttpRequest.responseText;
     }
+    
+    if ( !this.getXmlHttpRequest() )
+    {
+        throw new Error( "Could not load XMLHttpRequest object" );
+    }
 }
 
 /**
@@ -93,7 +98,7 @@ function AjaxService( url, handlerName )
  */
 AjaxService.prototype.invoke = function( method, arguments )
 {
-    return this.connection.post( url, this.getMessage( method, arguments ), 'text/xml' );
+    return this.connection.post( this.url, this.getMessage( method, arguments ), 'text/xml' );
 }
 
 /**
