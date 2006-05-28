@@ -446,6 +446,6 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
     /** Indicates whether or not the incoming response is a fault response. */
     private boolean isFaultResponse;
     
-    /** <describe> */
-    private XmlRpcSerializer serializer;
+    /** The serializer used to serialize arguments. */
+    private XmlRpcSerializer serializer = new XmlRpcSerializer();
 }
