@@ -47,6 +47,7 @@
         <jar jarfile="${build.jars.dir}/xmlrpc-client.jar">
             <fileset dir="${build.classes.dir}">
                 <include name="**/Base64.class"/>
+                <include name="**/XmlRpcValue.class"/>
                 <include name="**/XmlRpcArray.class"/>
                 <include name="**/XmlRpcStruct.class"/>
                 <include name="**/XmlRpcMessages.class"/>
@@ -57,6 +58,8 @@
                 <include name="**/XmlRpcException.class"/>
                 <include name="**/XmlRpcParser.class"/>
                 <include name="**/XmlRpcSerializer.class"/>
+                <include name="**/XmlRpcCustomSerializer.class"/>
+                <include name="**/XmlRpcInvocationHandler.class"/>
                 <include name="redstone/xmlrpc/serializers/*.class"/>
             </fileset>
             <fileset dir="${src.dir}">
