@@ -38,7 +38,7 @@ import java.util.Date;
  *  @author Greger Olsson
  */
 
-public class XmlRpcArray extends ArrayList<Object>
+public class XmlRpcArray extends ArrayList
 {
     /**
      *  Returns the String at the given index in the array.

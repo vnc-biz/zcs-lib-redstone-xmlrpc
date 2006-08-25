@@ -121,7 +121,7 @@ public class XmlRpcServer
 
     public XmlRpcInvocationHandler getInvocationHandler( String name )
     {
-        return handlers.get( name );
+        return ( XmlRpcInvocationHandler ) handlers.get( name );
     }
 
 
@@ -161,7 +161,7 @@ public class XmlRpcServer
      *  @return The incovation interceptors installed in this server.
      */
 
-    public List<XmlRpcInvocationInterceptor> getInvocationInterceptors()
+    public List getInvocationInterceptors()
     {
         return interceptors;
     }
@@ -206,10 +206,10 @@ public class XmlRpcServer
     
 
     /** <describe> */
-    private Map<String,XmlRpcInvocationHandler> handlers = new HashMap<String,XmlRpcInvocationHandler>();
+    private Map/*<String,XmlRpcInvocationHandler>*/ handlers = new HashMap();
 
     /** <describe> */
-    private List<XmlRpcInvocationInterceptor> interceptors = new ArrayList<XmlRpcInvocationInterceptor>();
+    private List/*<XmlRpcInvocationInterceptor>*/ interceptors = new ArrayList();
     
     /** <describe> */
     private XmlRpcSerializer serializer;

@@ -171,7 +171,6 @@ public class ReflectiveInvocationHandler implements XmlRpcInvocationHandler
      *  @throws May throw any Exception
      */
 
-    @SuppressWarnings("unchecked")
     protected Object execute(
         String methodName,
         Class[] argClasses,
@@ -232,9 +231,9 @@ public class ReflectiveInvocationHandler implements XmlRpcInvocationHandler
         StringBuffer error = new StringBuffer( 128 );
         error.append( XmlRpcMessages.getString( "ReflectiveInvocationHandler.MethodDontExist" ) );
 
-        for ( Class argClass : argClasses )
+        for ( int i = 0; i < argClasses.length; ++i )
         {
-            error.append( argClass.getName() );
+            error.append( argClasses[ i ].getName() );
             error.append( ' ' );
         }
         

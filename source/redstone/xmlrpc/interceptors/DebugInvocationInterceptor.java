@@ -44,7 +44,7 @@ public class DebugInvocationInterceptor implements XmlRpcInvocationInterceptor
                .append( invocation.getHandlerName() )
                .append( '.' )
                .append( invocation.getMethodName() )
-               .append( invocation.getArguments() );
+               .append( invocation.getArguments().toString() );
         
         System.out.println( message.toString() );
         

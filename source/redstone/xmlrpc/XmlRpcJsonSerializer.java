@@ -83,7 +83,6 @@ public class XmlRpcJsonSerializer extends XmlRpcSerializer
      *  Overrides the default serializing mechanism to use JSON format instead.
      */
     
-    @Override
     public void writeEnvelopeHeader( Object value, Writer writer ) throws IOException
     {
         writer.write( '(' );
@@ -94,7 +93,6 @@ public class XmlRpcJsonSerializer extends XmlRpcSerializer
      *  Overrides the default serializing mechanism to use JSON format instead.
      */
     
-    @Override
     public void writeEnvelopeFooter( Object value, Writer writer ) throws IOException
     {
         writer.write( ')' );
@@ -105,7 +103,6 @@ public class XmlRpcJsonSerializer extends XmlRpcSerializer
      *  Overrides the default serializing mechanism to use JSON format instead.
      */
     
-    @Override
     public void writeError( String message, Writer writer ) throws IOException
     {
         writer.write( '\'' );
@@ -118,7 +115,6 @@ public class XmlRpcJsonSerializer extends XmlRpcSerializer
      *  Overrides the default serializing mechanism to use JSON format instead.
      */
 
-    @Override
     public void serialize(
         Object value,
         Writer writer )
@@ -159,7 +155,7 @@ public class XmlRpcJsonSerializer extends XmlRpcSerializer
 
             for ( int i = 0; i < customSerializers.size(); ++i )
             {
-                XmlRpcCustomSerializer serializer = customSerializers.get( i );
+                XmlRpcCustomSerializer serializer = ( XmlRpcCustomSerializer ) customSerializers.get( i );
 
                 if ( serializer.getSupportedClass().isInstance( value ) )
                 {

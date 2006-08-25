@@ -78,7 +78,7 @@ public class ValidationHandler extends ReflectiveInvocationHandler
             }
         }
 
-        Map<String,Integer> result = new HashMap<String,Integer>();
+        Map/*<String,Integer>*/ result = new HashMap();
 
         result.put( "ctLeftAngleBrackets", new Integer( ctLeftAngleBrackets ) );
         result.put( "ctRightAngleBrackets", new Integer( ctRightAngleBrackets ) );
@@ -129,7 +129,7 @@ public class ValidationHandler extends ReflectiveInvocationHandler
         Date dateTime,
         byte[] bytes )
     {
-        List<Object> result = new ArrayList<Object>( 6 );
+        List result = new ArrayList( 6 );
 
         result.add( new Integer( number ) );
         result.add( new Boolean( bool ) );
@@ -192,7 +192,7 @@ public class ValidationHandler extends ReflectiveInvocationHandler
 
     public Map simpleStructReturnTest( int number )
     {
-        Map<String,Integer> result = new HashMap<String,Integer>();
+        Map/*<String,Integer>*/ result = new HashMap();
 
         result.put( "times10", new Integer( number * 10 ) );
         result.put( "times100", new Integer( number * 100 ) );

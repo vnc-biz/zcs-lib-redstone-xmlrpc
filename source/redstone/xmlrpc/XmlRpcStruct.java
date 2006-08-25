@@ -38,7 +38,7 @@ import java.util.HashMap;
  *  @author Greger Olsson
  */
 
-public class XmlRpcStruct extends HashMap<String,Object>
+public class XmlRpcStruct extends HashMap/*<String,Object>*/
 {
     /**
      *  Returns the String with the given key from the Struct.

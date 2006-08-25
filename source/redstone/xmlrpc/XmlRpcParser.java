@@ -127,7 +127,7 @@ public abstract class XmlRpcParser extends DefaultHandler
             }
             else
             {
-                reader = readers.pop();
+                reader = ( XMLReader ) readers.pop();
             }
         }
 
@@ -330,7 +330,7 @@ public abstract class XmlRpcParser extends DefaultHandler
 
 
     /** Our stack of values. May contain several levels depending on message complexity */
-    private Stack<Object> values = new Stack<Object>();
+    private Stack values = new Stack();
 
     /** The current value (the currently enclosing <value> element) */
     private XmlRpcValue currentValue;
@@ -342,5 +342,5 @@ public abstract class XmlRpcParser extends DefaultHandler
     private StringBuffer charData = new StringBuffer( 128 );
 
     /** A cache of parsers so that we don't have to recreate them at every call. TODO Determine if necessary. */
-    private static Stack<XMLReader> readers = new Stack<XMLReader>();
+    private static Stack/*<XMLReader>*/ readers = new Stack();
 }

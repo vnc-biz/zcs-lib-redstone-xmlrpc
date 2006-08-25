@@ -226,7 +226,7 @@ public class XmlRpcSerializer
 
             for ( int i = 0; i < customSerializers.size(); ++i )
             {
-                XmlRpcCustomSerializer serializer = customSerializers.get( i );
+                XmlRpcCustomSerializer serializer = ( XmlRpcCustomSerializer ) customSerializers.get( i );
                 
                 if ( serializer.getSupportedClass().isInstance( value ) )
                 {
@@ -255,7 +255,6 @@ public class XmlRpcSerializer
      *  @value customSerializer The serializer to extend the original serializer with.
      */
 
-    @SuppressWarnings("unchecked")
     public void addCustomSerializer(
         XmlRpcCustomSerializer customSerializer )
     {
@@ -263,7 +262,7 @@ public class XmlRpcSerializer
 
         for ( int i = 0; i < customSerializers.size(); ++i )
         {
-            XmlRpcCustomSerializer customSerializerEntry = customSerializers.get( i );
+            XmlRpcCustomSerializer customSerializerEntry = ( XmlRpcCustomSerializer ) customSerializers.get( i );
 
             // Does the supplied serializer support a subclass or sub-interface of
             // the serializer at the current element. If so, the supplied serializer
@@ -297,7 +296,7 @@ public class XmlRpcSerializer
 
 
     /** The list of currently registered custom serializers */
-    protected List<XmlRpcCustomSerializer> customSerializers = new ArrayList<XmlRpcCustomSerializer>();
+    protected List/*<XmlRpcCustomSerializer>*/ customSerializers = new ArrayList();
     
     /** Date formatter shared by all XmlRpcValues */
     private static final SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyyMMdd'T'HH:mm:ss" );

@@ -203,7 +203,7 @@ public class XmlRpcDispatcher extends XmlRpcParser
 
         for ( int i = 0; i < server.getInvocationInterceptors().size(); ++i )
         {
-            p = server.getInvocationInterceptors().get( i );
+            p = ( XmlRpcInvocationInterceptor ) server.getInvocationInterceptors().get( i );
 
             if ( !p.before( invocation ) )
             {
@@ -226,7 +226,7 @@ public class XmlRpcDispatcher extends XmlRpcParser
 
         for ( int i = 0; i < server.getInvocationInterceptors().size(); ++i )
         {
-            p = server.getInvocationInterceptors().get( i );
+            p = ( XmlRpcInvocationInterceptor ) server.getInvocationInterceptors().get( i );
             returnValue = p.after( invocation, returnValue );
             
             // If the interceptor intercepts the return value completely and takes
@@ -256,7 +256,7 @@ public class XmlRpcDispatcher extends XmlRpcParser
 
         for ( int i = 0; i < server.getInvocationInterceptors().size(); ++i )
         {
-            p = server.getInvocationInterceptors().get( i );
+            p = ( XmlRpcInvocationInterceptor ) server.getInvocationInterceptors().get( i );
 
             p.onException( invocation, exception );
         }
@@ -320,7 +320,7 @@ public class XmlRpcDispatcher extends XmlRpcParser
     private String methodName;
 
     /** The arguments for the method */
-    private List<Object> arguments = new ArrayList<Object>( 6 );
+    private List arguments = new ArrayList( 6 );
 
     /** Holds the XML-RPC repsonse as it is built up */
     private Writer writer;
