@@ -18,8 +18,9 @@
 	Peace Software International (http://www.peace.com).	
 -->
 
-<project name="xmlrpc" default="jars">
+<project name="xmlrpc" default="zip">
 
+    <property name="version" value="1.0"/>
     <property name="src.dir" value="${basedir}/source"/>
     <property name="build.dir" value="${basedir}/build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
@@ -35,7 +36,7 @@
     <target name="jars" depends="compile">
         <mkdir dir="${build.jars.dir}"/>
         <!-- Full JAR with classes for both client and server, including JSON support. -->
-        <jar jarfile="${build.jars.dir}/xmlrpc.jar">
+        <jar jarfile="${build.jars.dir}/xmlrpc-${version}.jar">
             <fileset dir="${build.classes.dir}">
                 <include name="**/*.class"/>
             </fileset>
@@ -44,7 +45,7 @@
             </fileset>
         </jar>
         <!-- Client JAR with classes for client only, and no JSON support. -->
-        <jar jarfile="${build.jars.dir}/xmlrpc-client.jar">
+        <jar jarfile="${build.jars.dir}/xmlrpc-client-${version}.jar">
             <fileset dir="${build.classes.dir}">
                 <include name="**/Base64.class"/>
                 <include name="**/XmlRpcValue.class"/>
@@ -66,6 +67,17 @@
                 <include name="**/*.properties"/>
             </fileset>
         </jar>
+    </target>
+    
+    <target name="zip" depends="jars">
+        <zip destfile="${build.dir}/redstone-xmlrpc-${version}.zip">
+            <fileset dir="${build.jars.dir}">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${src.dir}">
+                <include name="ajax.js"/>
+            </fileset>
+        </zip>
     </target>
 
     <target name="compile">
