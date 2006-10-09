@@ -53,7 +53,8 @@
                 <include name="**/XmlRpcStruct.class"/>
                 <include name="**/XmlRpcMessages.class"/>
                 <include name="**/XmlRpcClient*.class"/>
-                <include name="**/XmlRpcProxy.class"/>
+                <include name="**/XmlRpcCallback*.class"/>
+            	<include name="**/XmlRpcProxy.class"/>
                 <include name="**/XmlRpcException.class"/>
                 <include name="**/XmlRpcFault.class"/>
                 <include name="**/XmlRpcException.class"/>
