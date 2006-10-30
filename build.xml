@@ -20,7 +20,7 @@
 
 <project name="xmlrpc" default="zip">
 
-    <property name="version" value="1.0"/>
+    <property name="version" value="1.0.1"/>
     <property name="src.dir" value="${basedir}/source"/>
     <property name="build.dir" value="${basedir}/build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
