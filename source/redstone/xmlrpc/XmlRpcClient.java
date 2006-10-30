@@ -371,6 +371,8 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
         if ( isFaultResponse )
         {
             XmlRpcStruct fault = ( XmlRpcStruct ) returnValue;
+            isFaultResponse = false;
+            
             throw new XmlRpcFault( fault.getInteger( "faultCode" ),
                                    fault.getString( "faultString" ) );
         }
