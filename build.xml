@@ -79,6 +79,11 @@
                 <include name="ajax.js"/>
             </fileset>
         </zip>
+        <zip destfile="${build.dir}/redstone-xmlrpc-src-${version}.zip">
+            <fileset dir="${src.dir}">
+                <include name="**"/>
+            </fileset>
+        </zip>
     </target>
 
     <target name="compile">
