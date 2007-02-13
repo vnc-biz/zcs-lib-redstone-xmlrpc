@@ -84,6 +84,11 @@ public class XmlRpcValue
                 value = new Integer( charData );
                 break;
 
+            case XmlRpcParser.I8:
+                
+                value = new Long( charData );
+                break;
+                
             case XmlRpcParser.BOOLEAN:
 
                 value = new Boolean( Integer.parseInt( charData ) == 1 );

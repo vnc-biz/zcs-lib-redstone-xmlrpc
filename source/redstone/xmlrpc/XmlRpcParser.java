@@ -54,6 +54,9 @@ public abstract class XmlRpcParser extends DefaultHandler
     /** The hash value of i4 elements */
     public final static int I4 = 3307;
 
+    /** The hash value of i8, Apache elements */
+    public final static int I8 = 3311;
+    
     /** The hash value of int elements */
     public final static int INT = 104431;
 
@@ -187,6 +190,7 @@ public abstract class XmlRpcParser extends DefaultHandler
 
             case STRING:
             case I4:
+            case I8:
             case INT:
             case BOOLEAN:
             case DOUBLE:

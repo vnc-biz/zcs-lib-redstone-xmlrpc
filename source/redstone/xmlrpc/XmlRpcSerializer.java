@@ -61,12 +61,15 @@ public class XmlRpcSerializer
     {
         if ( addCustomSerializers )
         {
+            customSerializers.add( new redstone.xmlrpc.serializers.LongPrimitiveSerializer() );
+            customSerializers.add( new redstone.xmlrpc.serializers.LongWrapperSerializer() );
             customSerializers.add( new redstone.xmlrpc.serializers.MapSerializer() );
             customSerializers.add( new redstone.xmlrpc.serializers.ListSerializer() );
             customSerializers.add( new redstone.xmlrpc.serializers.CollectionSerializer() );
             customSerializers.add( new redstone.xmlrpc.serializers.ObjectArraySerializer() );
             customSerializers.add( new redstone.xmlrpc.serializers.IntArraySerializer() );
             customSerializers.add( new redstone.xmlrpc.serializers.FloatArraySerializer() );
+            customSerializers.add( new redstone.xmlrpc.serializers.LongArraySerializer() );
             customSerializers.add( new redstone.xmlrpc.serializers.DoubleArraySerializer() );
             customSerializers.add( new redstone.xmlrpc.serializers.BooleanArraySerializer() );
             customSerializers.add( new redstone.xmlrpc.serializers.IntrospectingSerializer() );
@@ -170,16 +173,15 @@ public class XmlRpcSerializer
             writer.write( "</string>" );
         }
         else if ( value instanceof Integer ||
-                   value instanceof Long    ||
-                   value instanceof Short   ||
-                   value instanceof Byte )
+                  value instanceof Short   ||
+                  value instanceof Byte )
         {
             writer.write( "<i4>" );
             writer.write( value.toString() );
             writer.write( "</i4>" );
         }
         else if ( value instanceof Double ||
-                   value instanceof Float )
+                  value instanceof Float )
         {
             writer.write( "<double>" );
             writer.write( value.toString() );
