@@ -5,11 +5,13 @@ import redstone.xmlrpc.XmlRpcMessages;
 
 /**
  *  Provides encoding of raw bytes to base64-encoded characters, and
- *  decoding of base64 characters to raw bytes.
+ *  decoding of base64 characters to raw bytes. The original version
+ *  was written by Kevin Kelly which has been updated to support
+ *  newline characters based on from Object Refinery Limited and
+ *  contributors.
  *
  *  @author Kevin Kelley (kelley@iguana.ruralnet.net)
- *  @version $Revision: 1.1 $
- *  @date 06 August 1998
+ *  @author Object Refinery Limited and Contributors
  */
 
 public class Base64
@@ -68,49 +70,69 @@ public class Base64
      *  Returns an array of bytes which were encoded in the passed
      *  character array.
      *
-     *  @param data the array of base64-encoded characters
+     *  @param data the array of base64-encoded characters which can
+     *              contain whitespace, padding, and invalid characters
+     *              which are stripped from the input.
+     *              
      *  @return decoded data array
      */
 
     static public byte[] decode( byte[] data )
     {
-        int len = ( ( data.length + 3 ) / 4 ) * 3;
+        // Calculate actual length of the data, filtering away any
+        // non-BASE64 characters.
+        
+        int tempLen = data.length;
 
-        if ( data.length > 0 && data[ data.length - 1 ] == '=' )
+        for ( int i = 0; i < data.length; ++i )
         {
-            --len;
+            if ( ( data[ i ] > 255) || codes[ data[ i ] ] < 0 )
+            {
+                --tempLen;
+            }
+        }
+        
+        // Calculate required length of byte array:
+        //  -- 3 bytes for every 4 valid base64 chars
+        //  -- plus 2 bytes if there are 3 extra base64 chars,
+        //     or plus 1 byte if there are 2 extra.
+
+        int len = ( tempLen / 4 ) * 3;
+        
+        if ( ( tempLen % 4 ) == 3 )
+        {
+            len += 2;
+        }
+        
+        if ( ( tempLen % 4 ) == 2 )
+        {
+            len += 1;
         }
 
-        if ( data.length > 1 && data[ data.length - 2 ] == '=' )
-        {
-            --len;
-        }
-
-        byte[] out = new byte[ len ];
-
-        int shift = 0; // # of excess bits stored in accum
-        int accum = 0; // excess bits
+        final byte[] out = new byte[ len ];
+        int shift = 0;
+        int accum = 0;
         int index = 0;
 
-        for ( int ix = 0; ix < data.length; ix++ )
+        for ( int i = 0; i < data.length; ++i )
         {
-            int value = codes[ data[ ix ] & 0xFF ]; // ignore high byte of char
+            final int value = ( data[ i ] > 255 ) ? -1 : codes[ data[ i ] ];
 
+            // Skip over non-code
+            
             if ( value >= 0 )
             {
-                // skip over non-code
-
                 accum <<= 6;    // bits shift up by 6 each time thru
                 shift += 6;     // loop, with new bits being put in
                 accum |= value; // at the bottom.
-
+                
+                // Whenever there are 8 or more shifted in, write them out from
+                // the top, leaving any excess at the bottom for next iteration.
+                
                 if ( shift >= 8 )
                 {
-                    // whenever there are 8 or more shifted in,
-                    shift -= 8; // write them out (from the top, leaving any
-
-                    // excess at the bottom for next iteration.
-                    out[ index++ ] = ( byte )( ( accum >> shift ) & 0xff );
+                    shift -= 8;
+                    out[index++] = ( byte ) ( ( accum >> shift ) & 0xff );
                 }
             }
         }
