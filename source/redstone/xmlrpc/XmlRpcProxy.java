@@ -20,6 +20,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *  An XmlRpcProxy lets you use the services of an XML-RPC server through
@@ -93,6 +95,38 @@ public class XmlRpcProxy implements InvocationHandler
     }
 
 
+    /**
+     *  Sets the HTTP request properties that the proxy will use for the next invocation,
+     *  and any invocations that follow until setRequestProperties() is invoked again. Null
+     *  is accepted and means that no special HTTP request properties will be used in any
+     *  future XML-RPC invocations using this XmlRpcProxy instance.
+     *
+     *  @param requestProperties The HTTP request properties to use for future invocations
+     *                           made using this XmlRpcProxy instance. These will replace
+     *                           any previous properties set using this method or the
+     *                           setRequestProperty() method.
+     */
+
+    public void setRequestProperties( Map requestProperties )
+    {
+        client.setRequestProperties( requestProperties );
+    }
+    
+
+    /**
+     *  Sets a single HTTP request property to be used in future invocations.
+     *  @see setRequestProperties()
+     *
+     *  @param name Name of the property to set
+     *  @param value The value of the property
+     */
+
+    public void setRequestProperty( String name, String value )
+    {
+        client.setRequestProperty( name, value );
+    }
+
+    
     /**
      *  Handles method calls invoked on the proxy object. This is not used by the
      *  application but has to be public so that the dynamic proxy has access to it.
