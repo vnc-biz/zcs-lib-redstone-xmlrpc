@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2005 Redstone Handelsbolag
+    Copyright (c) 2007 Redstone Handelsbolag
 
     This library is free software; you can redistribute it and/or modify it under the terms
     of the GNU Lesser General Public License as published by the Free Software Foundation;
@@ -27,8 +27,10 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -79,6 +81,43 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
         }
     }
 
+
+    /**
+     *  Sets the HTTP request properties that the client will use for the next invocation,
+     *  and any invocations that follow until setRequestProperties() is invoked again. Null
+     *  is accepted and means that no special HTTP request properties will be used in any
+     *  future XML-RPC invocations using this XmlRpcClient instance.
+     *
+     *  @param requestProperties The HTTP request properties to use for future invocations
+     *                           made using this XmlRpcClient instance. These will replace
+     *                           any previous properties set using this method or the
+     *                           setRequestProperty() method.
+     */
+
+    public void setRequestProperties( Map requestProperties )
+    {
+        this.requestProperties = requestProperties;
+    }
+    
+
+    /**
+     *  Sets a single HTTP request property to be used in future invocations.
+     *  @see setRequestProperties()
+     *
+     *  @param name Name of the property to set
+     *  @param value The value of the property
+     */
+
+    public void setRequestProperty( String name, String value )
+    {
+        if ( requestProperties == null )
+        {
+            requestProperties = new HashMap();
+        }
+        
+        requestProperties.put( name, value );
+    }
+    
 
     /**
      *  Invokes a method on the terminating XML-RPC end point. The supplied method name and
@@ -417,9 +456,13 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
 
 
     /**
-     *  <describe>
+     *  Opens a connection to the URL associated with the client instance. Any
+     *  HTTP request properties set using setRequestProperties() are recorded
+     *  with the internal HttpURLConnection and are used in the HTTP request.
      * 
-     *  @throws IOException
+     *  @throws IOException If a connection could not be opened. The exception
+     *                      is propagated out of any unsuccessful calls made into
+     *                      the internal java.net.HttpURLConnection.
      */
 
     private void openConnection() throws IOException
@@ -429,6 +472,19 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
         connection.setDoOutput( true );
         connection.setRequestMethod( "POST" );
         connection.setRequestProperty( "Content-Type", "text/xml" );
+        
+        if ( requestProperties != null )
+        {
+            for ( Iterator propertyNames = requestProperties.keySet().iterator();
+                  propertyNames.hasNext(); )
+            {
+                String propertyName = ( String ) propertyNames.next();
+                
+                connection.setRequestProperty(
+                    propertyName,
+                    ( String ) requestProperties.get( propertyName ) );
+            }
+        }
     }
 
 
@@ -437,6 +493,9 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
 
     /** Connection to the server. */
     private HttpURLConnection connection;
+    
+    /** HTTP request properties, or null if none have been set by the application. */
+    private Map requestProperties;
     
     /** The parsed value returned in a response. */
     private Object returnValue;
