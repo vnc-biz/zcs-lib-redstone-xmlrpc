@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2005 Redstone Handelsbolag
+    Copyright (c) 2007 Redstone Handelsbolag
 
     This library is free software; you can redistribute it and/or modify it under the terms
     of the GNU Lesser General Public License as published by the Free Software Foundation;
@@ -86,8 +86,9 @@ public class XmlRpcSerializer
 
     public void writeEnvelopeHeader( Object value, Writer writer ) throws IOException
     {
-        writer.write( "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                      "<methodResponse><params><param>" );
+        writer.write( "<?xml version=\"1.0\" encoding=\"" );
+        writer.write( XmlRpcMessages.getString( "XmlRpcSerlvet.Encoding" ) );
+        writer.write( "\"?><methodResponse><params><param>" );
     }
 
 
@@ -123,7 +124,9 @@ public class XmlRpcSerializer
 
     public void writeError( String message, Writer writer ) throws IOException
     {
-        writer.write( "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" );
+        writer.write( "<?xml version=\"1.0\" encoding=\"" );
+        writer.write( XmlRpcMessages.getString( "XmlRpcSerlvet.Encoding" ) );
+        writer.write( "\"?>" );
         writer.write( "<methodResponse><fault><value><struct>" );
         writer.write( "<member><name>faultCode</name><value><int>-1</int></value>" );
         writer.write( "</member><member><name>faultString</name><value><string>" );

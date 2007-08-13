@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2005 Redstone Handelsbolag
+    Copyright (c) 2007 Redstone Handelsbolag
 
     This library is free software; you can redistribute it and/or modify it under the terms
     of the GNU Lesser General Public License as published by the Free Software Foundation;
@@ -54,17 +54,16 @@ public class XmlRpcServlet extends HttpServlet
         
         if ( contentType != null && contentType.startsWith( "text/javascript+json" ) )
         {
+            contentType = "text/javascript+json";
             server = new XmlRpcServer( new XmlRpcJsonSerializer() );
         }
         else
         {
+            contentType = "text/xml";
             server = new XmlRpcServer();
-            
-            if ( contentType == null )
-            {
-                contentType = "text/xml; charset=ISO-8859-1";
-            }
         }
+        
+        contentType += "; charset=" + XmlRpcMessages.getString( "XmlRpcServlet.Encoding" );
     }
 
     
@@ -120,6 +119,7 @@ public class XmlRpcServlet extends HttpServlet
         HttpServletResponse res)
         throws ServletException, IOException
     {
+        res.setCharacterEncoding( XmlRpcMessages.getString( "XmlRpcServlet.Encoding" ) );
         res.setContentType( contentType );
 
         if ( streamMessages )

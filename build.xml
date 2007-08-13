@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-	Copyright (c) 2005 Redstone Handelsbolag
+	Copyright (c) 2007 Redstone Handelsbolag
 	
 	This library is free software; you can redistribute it and/or modify it under the terms
 	of the GNU Lesser General Public License as published by the Free Software Foundation;
@@ -20,7 +20,7 @@
 
 <project name="xmlrpc" default="zip">
 
-    <property name="version" value="1.0.1"/>
+    <property name="version" value="2.0"/>
     <property name="src.dir" value="${basedir}/source"/>
     <property name="build.dir" value="${basedir}/build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>

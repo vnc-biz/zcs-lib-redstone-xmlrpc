@@ -157,8 +157,7 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
                 catch ( IOException ioe )
                 {
                     throw new XmlRpcException(
-                        XmlRpcMessages.getString( "XmlRpcClient.NetworkError" ),
-                            ioe );
+                        XmlRpcMessages.getString( "XmlRpcClient.NetworkError" ), ioe );
                 }
             }
         }
@@ -202,8 +201,7 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
                 catch ( IOException ioe )
                 {
                     throw new XmlRpcException(
-                        XmlRpcMessages.getString( "XmlRpcClient.NetworkError" ),
-                            ioe );
+                        XmlRpcMessages.getString( "XmlRpcClient.NetworkError" ), ioe );
                 }
             }
         }
@@ -300,14 +298,16 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
             if ( streamMessages )
             {
                 openConnection();
-                writer = new BufferedWriter( new OutputStreamWriter( connection.getOutputStream() ) );
+                writer = new BufferedWriter( new OutputStreamWriter( connection.getOutputStream(), "UTF-8" ) );
             }
             else
             {
                 ( ( StringWriter ) writer ).getBuffer().setLength( 0 );
             }
             
-            writer.write( "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" );
+            writer.write( "<?xml version=\"1.0\" encoding=\"" );
+            writer.write( XmlRpcMessages.getString( "XmlRpcClient.Encoding" ) );
+            writer.write( "\"?>" );
             writer.write( "<methodCall><methodName>" );
             writer.write( methodName );
             writer.write( "</methodName><params>" );
@@ -315,8 +315,7 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
         catch( IOException ioe )
         {
             throw new XmlRpcException(
-                XmlRpcMessages.getString( "XmlRpcClient.NetworkError" ),
-                    ioe );
+                XmlRpcMessages.getString( "XmlRpcClient.NetworkError" ), ioe );
         }
     }
 
@@ -471,7 +470,9 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
         connection.setDoInput( true );
         connection.setDoOutput( true );
         connection.setRequestMethod( "POST" );
-        connection.setRequestProperty( "Content-Type", "text/xml" );
+        connection.setRequestProperty(
+            "Content-Type", "text/xml; charset=" +
+            XmlRpcMessages.getString( "XmlRpcClient.Encoding" ) );
         
         if ( requestProperties != null )
         {
