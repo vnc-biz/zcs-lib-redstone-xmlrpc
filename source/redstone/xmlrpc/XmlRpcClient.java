@@ -298,7 +298,10 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
             if ( streamMessages )
             {
                 openConnection();
-                writer = new BufferedWriter( new OutputStreamWriter( connection.getOutputStream(), "UTF-8" ) );
+                writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                        connection.getOutputStream(),
+                        XmlRpcMessages.getString( "XmlRpcClient.Encoding" ) ) );
             }
             else
             {
