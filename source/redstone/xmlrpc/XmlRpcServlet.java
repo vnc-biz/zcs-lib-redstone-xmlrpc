@@ -19,6 +19,7 @@ package redstone.xmlrpc;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.StringTokenizer;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,14 +40,20 @@ public class XmlRpcServlet extends HttpServlet
      *  is read to see if the XML-RPC responses generated should be streamed
      *  immediately to the resonse (non-compliant) or if they should be buffered
      *  before being sent (compliant, since then the Content-Length header may
-     *  be set, as stipulated by the XML-RPC specification).
+     *  be set, as stipulated by the XML-RPC specification).<p>
+     *  
+     *  Further, the configuration is read to see if any services are mentioned
+     *  declaratively that are to be instantiated and published. An alternative
+     *  to this is to create a new servlet class extending from XmlRpcServlet
+     *  that publishes services programmatically.
      */
 
     public void init( ServletConfig config ) throws ServletException
     {
+        String services = config.getInitParameter( "services" );
         String contentType = config.getInitParameter( "contentType" );
         String streamMessages = config.getInitParameter( "streamMessages" );
-        
+
         if ( streamMessages != null && streamMessages.equals( "1" ) )
         {
             this.streamMessages = true;
@@ -64,6 +71,11 @@ public class XmlRpcServlet extends HttpServlet
         }
         
         this.contentType += "; charset=" + XmlRpcMessages.getString( "XmlRpcServlet.Encoding" );
+        
+        if ( services != null )
+        {
+            addInvocationHandlers( services );
+        }
     }
 
     
@@ -141,6 +153,74 @@ public class XmlRpcServlet extends HttpServlet
     }
 
     
+    /**
+     *  Adds invocation handlers based on the service classes mentioned in the supplied
+     *  services string.
+     * 
+     *  @param services List of services specified as fully qualified class names separated
+     *                  by whitespace (tabs, spaces, newlines). Each class name is also prefixed
+     *                  by the name of the service to use for the class:
+     *                  <pre>
+     *    <init-param>
+     *        <param-name>services</param-name>
+     *        <param-value>
+     *            SimpleDatabase:java.util.HashMap
+     *            RandomNumberGenerator:java.util.Random
+     *        </param-value>
+     *    </init-param>
+     *                  </pre>
+     *                  
+     *  @throws ServletException If the services argument is invalid or contains names of
+     *                           classes that cannot be loaded and instantiated.
+     */
+
+    private void addInvocationHandlers( String services ) throws ServletException
+    {
+        StringTokenizer tokenizer = new StringTokenizer( services );
+        
+        while ( tokenizer.hasMoreTokens() )
+        {
+            String service = tokenizer.nextToken();
+            int separatorIndex = service.indexOf( ':' );
+
+            if ( separatorIndex > -1 )
+            {
+                String serviceName = service.substring( 0, separatorIndex );
+                String className = service.substring( separatorIndex + 1 );
+                
+                try
+                {
+                    Class serviceClass = Class.forName( className );
+                    Object invocationHandler = serviceClass.newInstance();
+                    server.addInvocationHandler( serviceName, invocationHandler );
+                }
+                catch ( ClassNotFoundException e )
+                {
+                    throw new ServletException(
+                        XmlRpcMessages.getString(
+                            "XmlRpcServlet.ServiceClassNotFound" ) + className, e );
+                }
+                catch ( InstantiationException e )
+                {
+                    throw new ServletException(
+                        XmlRpcMessages.getString(
+                            "XmlRpcServlet.ServiceClassNotInstantiable" ) + className, e );
+                }
+                catch ( IllegalAccessException e )
+                {
+                    throw new ServletException(
+                        XmlRpcMessages.getString(
+                            "XmlRpcServlet.ServiceClassNotAccessible" ) + className, e );
+                }
+            }
+            else
+            {
+                throw new ServletException( XmlRpcMessages.getString( "XmlRpcServlet.InvalidServicesFormat" ) );
+            }
+        }
+    }
+    
+
     /** The XmlRpcServer containing the handlers and processors. */
     private XmlRpcServer server;
     
