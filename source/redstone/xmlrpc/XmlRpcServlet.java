@@ -215,7 +215,9 @@ public class XmlRpcServlet extends HttpServlet
             }
             else
             {
-                throw new ServletException( XmlRpcMessages.getString( "XmlRpcServlet.InvalidServicesFormat" ) );
+                throw new ServletException(
+                    XmlRpcMessages.getString(
+                        "XmlRpcServlet.InvalidServicesFormat" ) + services );
             }
         }
     }
