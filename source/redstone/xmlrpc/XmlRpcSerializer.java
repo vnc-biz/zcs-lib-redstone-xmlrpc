@@ -87,7 +87,7 @@ public class XmlRpcSerializer
     public void writeEnvelopeHeader( Object value, Writer writer ) throws IOException
     {
         writer.write( "<?xml version=\"1.0\" encoding=\"" );
-        writer.write( XmlRpcMessages.getString( "XmlRpcSerlvet.Encoding" ) );
+        writer.write( XmlRpcMessages.getString( "XmlRpcServlet.Encoding" ) );
         writer.write( "\"?><methodResponse><params><param>" );
     }
 
@@ -125,7 +125,7 @@ public class XmlRpcSerializer
     public void writeError( String message, Writer writer ) throws IOException
     {
         writer.write( "<?xml version=\"1.0\" encoding=\"" );
-        writer.write( XmlRpcMessages.getString( "XmlRpcSerlvet.Encoding" ) );
+        writer.write( XmlRpcMessages.getString( "XmlRpcServlet.Encoding" ) );
         writer.write( "\"?>" );
         writer.write( "<methodResponse><fault><value><struct>" );
         writer.write( "<member><name>faultCode</name><value><int>-1</int></value>" );
