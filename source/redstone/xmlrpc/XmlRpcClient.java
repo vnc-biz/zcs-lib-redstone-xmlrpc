@@ -219,6 +219,7 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
      *          contents is replaced on the next request. If there is a need to
      *          keep the fields between requests the map returned should be cloned.
      */
+
     public Map getResponseHeaderFields()
     {
         return headerFields;

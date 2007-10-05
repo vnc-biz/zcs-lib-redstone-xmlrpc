@@ -128,6 +128,22 @@ public class XmlRpcProxy implements InvocationHandler
 
     
     /**
+     *  Returns the HTTP header fields from the latest server invocation.
+     *  These are the fields set by the HTTP server hosting the XML-RPC service.
+     * 
+     *  @return The HTTP header fields from the latest server invocation. Note that
+     *          the XmlRpcClient instance retains ownership of this map and the map
+     *          contents is replaced on the next request. If there is a need to
+     *          keep the fields between requests the map returned should be cloned.
+     */
+    
+    public Map getResponseHeaderFields()
+    {
+        return client.getResponseHeaderFields();
+    }
+
+    
+    /**
      *  Handles method calls invoked on the proxy object. This is not used by the
      *  application but has to be public so that the dynamic proxy has access to it.
      *  It just hands the call over to the performCall method.
