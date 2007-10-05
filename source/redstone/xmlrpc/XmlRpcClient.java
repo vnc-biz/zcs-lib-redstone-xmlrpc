@@ -211,6 +211,21 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
 
 
     /**
+     *  Returns the HTTP header fields from the latest server invocation.
+     *  These are the fields set by the HTTP server hosting the XML-RPC service.
+     * 
+     *  @return The HTTP header fields from the latest server invocation. Note that
+     *          the XmlRpcClient instance retains ownership of this map and the map
+     *          contents is replaced on the next request. If there is a need to
+     *          keep the fields between requests the map returned should be cloned.
+     */
+    public Map getResponseHeaderFields()
+    {
+        return headerFields;
+    }
+    
+
+    /**
      *  A asynchronous version of invoke performing the call in a separate thread and
      *  reporting responses, faults, and exceptions through the supplied XmlRpcCallback.
      *  TODO Determine on proper strategy for instantiating Threads.
@@ -402,6 +417,16 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
         try
         {
             parse( new BufferedInputStream( connection.getInputStream() ) );
+
+            int fieldNumber = 1;
+            String headerFieldKey = null;
+            headerFields.clear();
+
+            while ( ( headerFieldKey = connection.getHeaderFieldKey( fieldNumber ) ) != null )
+            {
+                headerFields.put( headerFieldKey, connection.getHeaderField( fieldNumber ) );
+                ++fieldNumber;
+            }
         }
         catch ( Exception e )
         {
@@ -500,6 +525,9 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
     
     /** HTTP request properties, or null if none have been set by the application. */
     private Map requestProperties;
+    
+    /** HTTP header fields returned by the server in the latest response. */
+    private Map headerFields = new HashMap();
     
     /** The parsed value returned in a response. */
     private Object returnValue;
