@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2005 Redstone Handelsbolag
+    Copyright (c) 2007 Redstone Handelsbolag
 
     This library is free software; you can redistribute it and/or modify it under the terms
     of the GNU Lesser General Public License as published by the Free Software Foundation;
@@ -16,13 +16,17 @@
 
 package redstone.xmlrpc.interceptors;
 
+import javax.servlet.ServletContext;
 import redstone.xmlrpc.XmlRpcInvocation;
 import redstone.xmlrpc.XmlRpcInvocationInterceptor;
 
 /**
  *  Simple invocation processor that traces the calls made through an XmlRpcServer.
  *  This is used for debugging purposes only. This may be replaced with a more
- *  competent logging processor that perhaps is only logging exceptions that occur.
+ *  competent logging processor that perhaps is only logging exceptions that occur.<p>
+ *  
+ *  Logging occurs either on System.out or on the servlet container log depending
+ *  on if a ServletContext is supplied or not when constructing the interceptor.
  *
  *  @author Greger Olsson
  */
@@ -30,7 +34,31 @@ import redstone.xmlrpc.XmlRpcInvocationInterceptor;
 public class DebugInvocationInterceptor implements XmlRpcInvocationInterceptor
 {
     /**
-     *  Prints info on the invocation, the method, and its arguments.
+     *  Empty default constructor. Using this constructor rather than the
+     *  one accepting a ServletContext will cause the output to be printed
+     *  on System.out instead of the servlet container log.
+     */
+
+    public DebugInvocationInterceptor()
+    {
+    }
+
+
+    /**
+     *  Constructs the interceptor while associating it with the supplied
+     *  servlet context. Output will be directed to the servlet container log.
+     *  
+     *  @param servletContext The servlet context to be used for logging.
+     */
+    
+    public DebugInvocationInterceptor( ServletContext servletContext )
+    {
+        this.servletContext = servletContext;
+    }
+
+    
+    /**
+     *  Outputs information bout the invocation, the method, and its arguments.
      *  
      *  @param invocation The invocation.
      */
@@ -46,7 +74,14 @@ public class DebugInvocationInterceptor implements XmlRpcInvocationInterceptor
                .append( invocation.getMethodName() )
                .append( invocation.getArguments().toString() );
         
-        System.out.println( message.toString() );
+        if ( servletContext != null )
+        {
+            servletContext.log( message.toString() );
+        }
+        else
+        {
+            System.out.println( message.toString() );
+        }
         
         return true;
     }
@@ -67,7 +102,14 @@ public class DebugInvocationInterceptor implements XmlRpcInvocationInterceptor
                .append( ": " )
                .append( returnValue );
         
-        System.out.println( message.toString() );
+        if ( servletContext != null )
+        {
+            servletContext.log( message.toString() );
+        }
+        else
+        {
+            System.out.println( message.toString() );
+        }
 
         return returnValue;
     }
@@ -88,11 +130,23 @@ public class DebugInvocationInterceptor implements XmlRpcInvocationInterceptor
                .append( ": " )
                .append( exception.getMessage() );
         
-        if ( exception.getCause() != null )
+        if ( servletContext != null )
         {
-            message.append( exception.getCause().getMessage() );
+            servletContext.log( message.toString(), exception );
         }
-        
-        System.out.println( message.toString() );
+        else
+        {
+            if ( exception.getCause() != null )
+            {
+                message.append( exception.getCause().getMessage() );
+            }
+            
+            System.out.println( message.toString() );
+
+        }
     }
+    
+    
+    /** The servlet context that logging will be performed over. */
+    private ServletContext servletContext;
 }
