@@ -117,18 +117,21 @@ public class XmlRpcSerializer
     /**
      *  <describe>
      * 
+     *  @param code
      *  @param message
      *  @param writer
      * @throws IOException 
      */
 
-    public void writeError( String message, Writer writer ) throws IOException
+    public void writeError( int code, String message, Writer writer ) throws IOException
     {
         writer.write( "<?xml version=\"1.0\" encoding=\"" );
         writer.write( XmlRpcMessages.getString( "XmlRpcServlet.Encoding" ) );
         writer.write( "\"?>" );
         writer.write( "<methodResponse><fault><value><struct>" );
-        writer.write( "<member><name>faultCode</name><value><int>-1</int></value>" );
+        writer.write( "<member><name>faultCode</name><value><int>" );
+        writer.write( String.valueOf( code ) );
+        writer.write( "</int></value>" );
         writer.write( "</member><member><name>faultString</name><value><string>" );
         writer.write( message );
         writer.write( "</string></value></member></struct></value></fault></methodResponse>" );

@@ -116,7 +116,7 @@ public class XmlRpcDispatcher extends XmlRpcParser
 
                     if ( !preProcess( invocation ) )
                     {
-                        writeError( XmlRpcMessages.getString( "XmlRpcDispatcher.InvocationCancelled" ) );
+                        writeError( -1, XmlRpcMessages.getString( "XmlRpcDispatcher.InvocationCancelled" ) );
                     }
                     else
                     {
@@ -135,17 +135,24 @@ public class XmlRpcDispatcher extends XmlRpcParser
                 catch ( Throwable t )
                 {
                     processException( invocation, t );
-                    writeError( t.getClass().getName() + ": " + t.getMessage() );
+                    
+                    int code = -1;
+                    if ( t instanceof XmlRpcFault )
+                    {
+                        code = ( (XmlRpcFault) t ).getErrorCode();
+                    }
+                    
+                    writeError( code, t.getClass().getName() + ": " + t.getMessage() );
                 }
             }
             else
             {
-                writeError( XmlRpcMessages.getString( "XmlRpcDispatcher.HandlerNotFound" ) );
+                writeError( -1, XmlRpcMessages.getString( "XmlRpcDispatcher.HandlerNotFound" ) );
             }
         }
         else
         {
-            writeError( XmlRpcMessages.getString( "XmlRpcDispatcher.InvalidMethodNameFormat" ) );
+            writeError( -1, XmlRpcMessages.getString( "XmlRpcDispatcher.InvalidMethodNameFormat" ) );
         }
     }
 
@@ -286,15 +293,16 @@ public class XmlRpcDispatcher extends XmlRpcParser
     /**
      *  Creates an XML-RPC fault struct and puts it into the writer buffer.
      *
+     *  @param code The fault code.
      *  @param message The fault string.
      */
 
-    private void writeError( String message )
+    private void writeError( int code, String message )
     {
         try
         {
             logger.log( Level.WARNING, message );
-            this.server.getSerializer().writeError( message, writer );
+            this.server.getSerializer().writeError( code, message, writer );
         }
         catch ( IOException ignore )
         {
