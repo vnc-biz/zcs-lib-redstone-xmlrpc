@@ -132,9 +132,9 @@ public class XmlRpcSerializer
         writer.write( "<member><name>faultCode</name><value><int>" );
         writer.write( String.valueOf( code ) );
         writer.write( "</int></value>" );
-        writer.write( "</member><member><name>faultString</name><value><string>" );
-        writer.write( message );
-        writer.write( "</string></value></member></struct></value></fault></methodResponse>" );
+        writer.write( "</member><member><name>faultString</name>" );
+        serialize( message, writer );
+        writer.write( "</member></struct></value></fault></methodResponse>" );
     }
     
     
