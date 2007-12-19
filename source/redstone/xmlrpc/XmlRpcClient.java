@@ -368,7 +368,7 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
                 connection.setRequestProperty( "Content-Length", String.valueOf( buffer.length() ) );
 
                 OutputStream output = new BufferedOutputStream( connection.getOutputStream() );
-                output.write( buffer.toString().getBytes() );
+                output.write( buffer.toString().getBytes( XmlRpcMessages.getString( "XmlRpcClient.Encoding" ) ) );
                 output.flush();
                 output.close();
             }
