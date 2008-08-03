@@ -107,7 +107,7 @@ public abstract class XmlRpcParser extends DefaultHandler
      *
      *  @param is The input stream containing the XML-RPC message
      *
-     *  @throw Exception If anything went wrong during the whole parsing phase
+     *  @throws XmlRpcException If anything went wrong during the whole parsing phase
      */
 
     public void parse( InputStream is ) throws XmlRpcException
@@ -162,7 +162,9 @@ public abstract class XmlRpcParser extends DefaultHandler
      *  name. This increases readability, in my opinion, and perhaps performance
      *  as well (only one loop -- in hashCode() -- instead of in every equals() call).</p>
      *
-     *  @param See SAX documentation
+     *  @param uri {@inheritDoc}
+     *  @param name {@inheritDoc}
+     *  @param qualifiedName {@inheritDoc}
      */
 
     public void startElement(
@@ -221,7 +223,9 @@ public abstract class XmlRpcParser extends DefaultHandler
      *  when the value element ends. This is because we need to use the included
      *  member name.
      *
-     *  @param See SAX documentation
+     *  @param uri {@inheritDoc}
+     *  @param name {@inheritDoc}
+     *  @param qualifiedName {@inheritDoc}
      */
 
     public void endElement(
@@ -281,7 +285,9 @@ public abstract class XmlRpcParser extends DefaultHandler
      *  until actual character data is aquired. This is removed using the trim()
      *  method when the character data is consumed.</p>
      *
-     *  @param See SAX documentation
+     *  @param data {@inheritDoc}
+     *  @param start {@inheritDoc}
+     *  @param length {@inheritDoc}
      */
 
     public void characters( char[] data, int start, int length )

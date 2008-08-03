@@ -67,7 +67,7 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
     
     
     /**
-     *  @see XmlRpcClient(String,boolean)
+     *  @see #XmlRpcClient(String,boolean)
      */
 
     public XmlRpcClient( URL url, boolean streamMessages )
@@ -102,7 +102,7 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
 
     /**
      *  Sets a single HTTP request property to be used in future invocations.
-     *  @see setRequestProperties()
+     *  @see #setRequestProperties(Map)
      *
      *  @param name Name of the property to set
      *  @param value The value of the property
@@ -132,7 +132,7 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
      *  @throws XmlRpcException One or more of the supplied arguments are unserializable. That is,
      *                          the built-in serializer connot parse it or find a custom serializer
      *                          that can. There may also be problems with the socket communication.
-     * @throws  
+     * @throws  XmlRpcFault Error occurred in the method call.
      */
 
     public synchronized Object invoke(
@@ -450,7 +450,10 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
      *  Override the startElement() method inherited from XmlRpcParser. This way, we may set
      *  the error flag if we run into a fault-tag.
      *
-     *  @param See SAX documentation
+     *  @param uri {@inheritDoc}
+     *  @param name {@inheritDoc}
+     *  @param qualifiedName {@inheritDoc}
+     *  @param attributes {@inheritDoc}
      */
 
     public void startElement(

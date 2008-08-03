@@ -209,7 +209,7 @@ public class XmlRpcArray extends ArrayList
      *  Returns the byte[] with at the given index in the Array, as an
      *  input stream (currently, a java.io.ByteArrayInputStream).
      *
-     *  @param key The key of the value to extract.
+     *  @param index The index of the value to extract.
      *
      *  @throws ArrayOutOfBoundsException if index > size() - 1.
      *  @throws ClassCastException if the value at the given index is not a byte[].

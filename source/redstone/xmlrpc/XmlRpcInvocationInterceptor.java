@@ -70,7 +70,7 @@ public interface XmlRpcInvocationInterceptor
      *          has intercepted the call completely and no value is to be returned.
      */
 
-    Object after( XmlRpcInvocation incovation, Object returnValue );
+    Object after( XmlRpcInvocation invocation, Object returnValue );
 
 
     /**
@@ -81,5 +81,5 @@ public interface XmlRpcInvocationInterceptor
      *  @param exception The exception thrown by the method.
      */
 
-    void onException( XmlRpcInvocation incovation, Throwable exception );
+    void onException( XmlRpcInvocation invocation, Throwable exception );
 }

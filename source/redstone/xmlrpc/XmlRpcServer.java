@@ -71,7 +71,7 @@ public class XmlRpcServer
      *
      *  @param xmlInput The stream containing the XML-RPC message.
      *  
-     *  @param xmlOutput The stream to put the response in.
+     *  @param output The stream to put the response in.
      *
      *  @throws XmlRpcException if the input stream contains unparseable XML or if some error
      *          occurs in the SAX driver.
@@ -196,7 +196,7 @@ public class XmlRpcServer
     /**
      *  Sets the serializer this server is to use when encoding responses.
      * 
-     *  @return The serializer this server shall use.
+     *  @param serializer The serializer this server shall use.
      */
 
     public void setSerializer( XmlRpcSerializer serializer )
@@ -205,12 +205,12 @@ public class XmlRpcServer
     }
     
 
-    /** <describe> */
+    /** Invocation handlers registered in the server */
     private Map/*<String,XmlRpcInvocationHandler>*/ handlers = new HashMap();
 
-    /** <describe> */
+    /** List of interceptors invoked when processing XML-RPC messages */
     private List/*<XmlRpcInvocationInterceptor>*/ interceptors = new ArrayList();
     
-    /** <describe> */
+    /** The serializer used by the server */
     private XmlRpcSerializer serializer;
 }

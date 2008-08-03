@@ -25,6 +25,7 @@
     <property name="build.dir" value="${basedir}/build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.jars.dir" value="${build.dir}/lib"/>
+    <property name="build.javadoc.dir" value="${build.dir}/javadoc"/>
     <property name="lib.dir" value="${basedir}/lib"/>
 
     <path id="build.classpath">
@@ -54,7 +55,7 @@
                 <include name="**/XmlRpcMessages.class"/>
                 <include name="**/XmlRpcClient*.class"/>
                 <include name="**/XmlRpcCallback*.class"/>
-            	<include name="**/XmlRpcProxy.class"/>
+                <include name="**/XmlRpcProxy.class"/>
                 <include name="**/XmlRpcException.class"/>
                 <include name="**/XmlRpcFault.class"/>
                 <include name="**/XmlRpcException.class"/>
@@ -68,6 +69,18 @@
                 <include name="**/*.properties"/>
             </fileset>
         </jar>
+    </target>
+
+    <target name="javadoc" depends="compile" description="Generate the java-doc">
+        <mkdir dir="${build.javadoc.dir}"/>
+        <javadoc destdir="${build.javadoc.dir}" author="true" version="true"
+                 use="true" failonerror="false" classpathref="build.classpath"
+                 breakiterator="yes" useexternalfile="true">
+            <tag name="todo" scope="all" description="To do:" />
+            <fileset dir="source">
+                <include name="**/*.java" />
+            </fileset>
+        </javadoc>
     </target>
     
     <target name="zip" depends="jars">

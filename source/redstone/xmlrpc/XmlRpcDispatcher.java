@@ -66,7 +66,7 @@ public class XmlRpcDispatcher extends XmlRpcParser
      *  performs the parsing of the message, through the inherited parse() method,
      *  and locates and invokes the appropriate invocation handlers.
      *
-     *  @throw Exception When the inbound XML message cannot be parsed due to no
+     *  @throws XmlRpcException When the inbound XML message cannot be parsed due to no
      *                   available SAX driver, or when an invalid message was received.
      *                   All other exceptions are caught and encoded within the
      *                   XML-RPC writer.

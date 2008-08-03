@@ -119,7 +119,7 @@ public class DebugInvocationInterceptor implements XmlRpcInvocationInterceptor
      *  Prints trace info on the invocation exception.
      *
      *  @param invocation The invocation.
-     *  @param invocation The exception thrown by the method.
+     *  @param exception The exception thrown by the method.
      */
 
     public void onException( XmlRpcInvocation invocation, Throwable exception )

@@ -115,7 +115,7 @@ public class XmlRpcProxy implements InvocationHandler
 
     /**
      *  Sets a single HTTP request property to be used in future invocations.
-     *  @see setRequestProperties()
+     *  @see #setRequestProperties(Map)
      *
      *  @param name Name of the property to set
      *  @param value The value of the property
@@ -148,7 +148,7 @@ public class XmlRpcProxy implements InvocationHandler
      *  application but has to be public so that the dynamic proxy has access to it.
      *  It just hands the call over to the performCall method.
      *
-     *  @see The Dynamic Proxy API in JDK 1.3
+     *  @see "The Dynamic Proxy API in JDK 1.3"
      *
      *  @return Any of the values returned by an XmlRpcClient.
      */
