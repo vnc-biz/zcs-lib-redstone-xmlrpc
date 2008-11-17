@@ -187,10 +187,15 @@ public class XmlRpcProxy implements InvocationHandler
             handlerName = objectName;
         }
 
+        if ( !handlerName.equals( "" ) )
+        {
+            handlerName += ".";
+        }
+
         // Let the basic XmlRpcClient perform the call. This may result in an XmlRpcException
         // which will be propagated out from this method.
-
-        return client.invoke( handlerName + "." + method.getName(), args );
+        
+        return client.invoke( handlerName + method.getName(), args );
     }
 
 
