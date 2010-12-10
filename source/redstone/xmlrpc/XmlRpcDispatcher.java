@@ -35,6 +35,8 @@ import org.xml.sax.SAXException;
 
 public class XmlRpcDispatcher extends XmlRpcParser
 {
+    public static String DEFAULT_HANDLER_NAME = "__default__";
+
     /**
      *  Creates a dispatcher and associates it with an XmlRpcServer and the IP address
      *  of the calling client.
@@ -86,73 +88,72 @@ public class XmlRpcDispatcher extends XmlRpcParser
 
         int separator = methodName.lastIndexOf( "." );
 
-        if ( separator > -1 )
+        if ( separator == -1 )
         {
-            final String handlerName = methodName.substring( 0, separator );
-            methodName = methodName.substring( separator + 1 );
+            methodName = DEFAULT_HANDLER_NAME + "." + methodName;
+            separator = DEFAULT_HANDLER_NAME.length();
+        }
 
-            XmlRpcInvocationHandler handler = server.getInvocationHandler( handlerName );
+        final String handlerName = methodName.substring( 0, separator );
+        methodName = methodName.substring( separator + 1 );
 
-            if ( handler != null )
+        XmlRpcInvocationHandler handler = server.getInvocationHandler( handlerName );
+
+        if ( handler != null )
+        {
+            final int callId = ++callSequence;
+            XmlRpcInvocation invocation = null;
+            
+            if( server.getInvocationInterceptors().size() > 0 )
             {
-                final int callId = ++callSequence;
-                XmlRpcInvocation invocation = null;
-                
-                if( server.getInvocationInterceptors().size() > 0 )
-                {
-                    invocation = new XmlRpcInvocation(
-                        callId,
-                        handlerName,
-                        methodName,
-                        handler,
-                        arguments,
-                        writer );
-                }
-                
-                try
-                {
-                    // Invoke the method, which may throw any kind of exception. If any of the
-                    // preProcess calls thinks the invocation should be cancelled, we do so.
+                invocation = new XmlRpcInvocation(
+                    callId,
+                    handlerName,
+                    methodName,
+                    handler,
+                    arguments,
+                    writer );
+            }
+            
+            try
+            {
+                // Invoke the method, which may throw any kind of exception. If any of the
+                // preProcess calls thinks the invocation should be cancelled, we do so.
 
-                    if ( !preProcess( invocation ) )
-                    {
-                        writeError( -1, XmlRpcMessages.getString( "XmlRpcDispatcher.InvocationCancelled" ) );
-                    }
-                    else
-                    {
-                        Object returnValue = handler.invoke( methodName, arguments );
-                        returnValue = postProcess( invocation, returnValue );
-                        
-                        // If the return value wasn't intercepted by any of the interceptors,
-                        // write the response using the current serlialization mechanism.
-                        
-                        if ( returnValue != null )
-                        {
-                            writeValue( returnValue );
-                        }
-                    }
-                }
-                catch ( Throwable t )
+                if ( !preProcess( invocation ) )
                 {
-                    processException( invocation, t );
+                    writeError( -1, XmlRpcMessages.getString( "XmlRpcDispatcher.InvocationCancelled" ) );
+                }
+                else
+                {
+                    Object returnValue = handler.invoke( methodName, arguments );
+                    returnValue = postProcess( invocation, returnValue );
                     
-                    int code = -1;
-                    if ( t instanceof XmlRpcFault )
+                    // If the return value wasn't intercepted by any of the interceptors,
+                    // write the response using the current serlialization mechanism.
+                    
+                    if ( returnValue != null )
                     {
-                        code = ( (XmlRpcFault) t ).getErrorCode();
+                        writeValue( returnValue );
                     }
-                    
-                    writeError( code, t.getClass().getName() + ": " + t.getMessage() );
                 }
             }
-            else
+            catch ( Throwable t )
             {
-                writeError( -1, XmlRpcMessages.getString( "XmlRpcDispatcher.HandlerNotFound" ) );
+                processException( invocation, t );
+                
+                int code = -1;
+                if ( t instanceof XmlRpcFault )
+                {
+                    code = ( (XmlRpcFault) t ).getErrorCode();
+                }
+                
+                writeError( code, t.getClass().getName() + ": " + t.getMessage() );
             }
         }
         else
         {
-            writeError( -1, XmlRpcMessages.getString( "XmlRpcDispatcher.InvalidMethodNameFormat" ) );
+            writeError( -1, XmlRpcMessages.getString( "XmlRpcDispatcher.HandlerNotFound" ) );
         }
     }
 

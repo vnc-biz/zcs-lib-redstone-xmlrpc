@@ -94,7 +94,7 @@ public class XmlRpcServer
 
     public void addInvocationHandler( String name, Object handler )
     {
-        handlers.put( name, new ReflectiveInvocationHandler( handler ) );
+        addInvocationHandler( name, new ReflectiveInvocationHandler( handler ) );
     }
 
     
@@ -108,6 +108,11 @@ public class XmlRpcServer
 
     public void addInvocationHandler( String name, XmlRpcInvocationHandler handler )
     {
+        if ( name == null )
+        {
+            name = XmlRpcDispatcher.DEFAULT_HANDLER_NAME;
+        }
+
         handlers.put( name, handler );
     }
 
