@@ -501,6 +501,7 @@ public class XmlRpcClient extends XmlRpcParser implements XmlRpcInvocationHandle
         connection = ( HttpURLConnection ) url.openConnection();
         connection.setDoInput( true );
         connection.setDoOutput( true );
+        connection.setConnectTimeout(10000);
         connection.setRequestMethod( "POST" );
         connection.setRequestProperty(
             "Content-Type", "text/xml; charset=" +
