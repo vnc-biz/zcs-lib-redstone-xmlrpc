@@ -1,0 +1,5 @@
+*.deb
+/image
+/src/zcs-lib-redstone-xmlrpc/classes/
+/src/zcs-lib-redstone-xmlrpc/zcs-lib-redstone-xmlrpc.jar
+/zimlets.list

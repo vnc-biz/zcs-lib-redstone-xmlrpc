@@ -1,0 +1,10 @@
+VERSION=1.1.1.1
+PACKAGE=zcs-lib-redstone-xmlrpc
+MAINTAINER=Enrico Weigelt <enrico.weigelt@vnc.biz>
+SECTION=base
+ARCHITECTURE=All
+PRIORITY=optional
+DEPENDS=
+DESCRIPTION=Redstone XML-RPC library
+REDMINE_UPLOAD_PROJECT=zcs-lib-redstone-xmlrpc
+REDMINE_UPLOAD_URL=https://redmine.vnc.biz/redmine/
