@@ -1,0 +1,1 @@
+This is a version of Redstone XMLRPC library, packaged for the Zimbra Collaboration Suite.
