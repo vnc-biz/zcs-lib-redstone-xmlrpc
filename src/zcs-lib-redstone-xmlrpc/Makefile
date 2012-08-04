@@ -14,7 +14,8 @@ ZCS_LIB_JARS=\
 
 JAR_FILE_PREPARE_RULE=jar_file_prepare
 
-include $(TOPDIR)/zcs-java-lib.mk
+include $(TOPDIR)/common.mk
+include $(ZIMBRA_BUILD_ROOT)/extensions-extra/zmpkg/mk/zcs-java-lib.mk
 
 jar_file_prepare:
 	@cp src/redstone/xmlrpc/*.properties classes/redstone/xmlrpc/
