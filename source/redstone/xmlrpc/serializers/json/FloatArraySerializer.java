@@ -24,47 +24,42 @@ import redstone.xmlrpc.XmlRpcSerializer;
 
 /**
  *  Serializes arrays of primitive floats.
- * 
+ *
  *  @author Greger Olsson
  */
 
-public class FloatArraySerializer implements XmlRpcCustomSerializer
-{
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
-     */
-    
-    public Class getSupportedClass()
-    {
-        return float[].class;
-    }
+public class FloatArraySerializer implements XmlRpcCustomSerializer {
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
+	 */
+
+	public Class getSupportedClass() {
+		return float[].class;
+	}
 
 
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
-     */
-    
-    public void serialize(
-        Object value,
-        Writer writer,
-        XmlRpcSerializer builtInSerializer )
-        throws XmlRpcException, IOException
-    {
-        writer.write( '[' );
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
+	 */
 
-        float[] array = ( float[] ) value;
+	public void serialize(
+	    Object value,
+	    Writer writer,
+	    XmlRpcSerializer builtInSerializer )
+	throws XmlRpcException, IOException {
+		writer.write( '[' );
 
-        for ( int i = 0; i < array.length; ++i )
-        {
-            writer.write( Float.toString( array[ i ] ) );
-            
-            if ( i < array.length - 1 )
-            {
-                writer.write( ',' );
-            }
-        }
+		float[] array = ( float[] ) value;
 
-        writer.write( ']' );
+		for ( int i = 0; i < array.length; ++i ) {
+			writer.write( Float.toString( array[ i ] ) );
 
-    }
+			if ( i < array.length - 1 ) {
+				writer.write( ',' );
+			}
+		}
+
+		writer.write( ']' );
+
+	}
 }

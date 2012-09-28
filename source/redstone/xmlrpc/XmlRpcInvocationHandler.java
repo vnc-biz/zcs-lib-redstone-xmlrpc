@@ -23,20 +23,19 @@ import java.util.List;
  *  @author Greger Olsson
  */
 
-public interface XmlRpcInvocationHandler
-{
-    /**
-     *  Called by a dipatcher when an XML-RPC invocation has been received
-     *  (and processed by any XmlRpcInvocationProcessors).
-     * 
-     *  @param method The name of the method that is to be invoked.
-     *  @param arguments The arguments to supply to the method.
-     *  @return The return value from the method.
-     *  @throws Throwable Any kind of exception may occurr in the method.
-     */
-    
-    Object invoke(
-        String method,
-        List arguments )
-        throws Throwable;
+public interface XmlRpcInvocationHandler {
+	/**
+	 *  Called by a dipatcher when an XML-RPC invocation has been received
+	 *  (and processed by any XmlRpcInvocationProcessors).
+	 *
+	 *  @param method The name of the method that is to be invoked.
+	 *  @param arguments The arguments to supply to the method.
+	 *  @return The return value from the method.
+	 *  @throws Throwable Any kind of exception may occurr in the method.
+	 */
+
+	Object invoke(
+	    String method,
+	    List arguments )
+	throws Throwable;
 }

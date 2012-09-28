@@ -28,47 +28,42 @@ import redstone.xmlrpc.serializers.ListSerializer;
 /**
  *  Serializes java.util.Collections. See also ListSerializer which serializes
  *  java.util.Lists which use direct access instead of iterators.
- * 
+ *
  *  @author Greger Olsson
  *  @see ListSerializer
  */
 
-public class CollectionSerializer implements XmlRpcCustomSerializer
-{
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
-     */
-    
-    public Class getSupportedClass()
-    {
-        return Collection.class;
-    }
+public class CollectionSerializer implements XmlRpcCustomSerializer {
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
+	 */
+
+	public Class getSupportedClass() {
+		return Collection.class;
+	}
 
 
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
-     */
-    
-    public void serialize(
-        Object value,
-        Writer writer,
-        XmlRpcSerializer builtInSerializer )
-        throws XmlRpcException, IOException
-    {
-        writer.write( '[' );
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
+	 */
 
-        Iterator it = ( ( Collection ) value ).iterator();
+	public void serialize(
+	    Object value,
+	    Writer writer,
+	    XmlRpcSerializer builtInSerializer )
+	throws XmlRpcException, IOException {
+		writer.write( '[' );
 
-        while ( it.hasNext() )
-        {
-            builtInSerializer.serialize( it.next(), writer );
-            
-            if ( it.hasNext() )
-            {
-                writer.write( ',' );
-            }
-        }
+		Iterator it = ( ( Collection ) value ).iterator();
 
-        writer.write( ']' );
-    }
+		while ( it.hasNext() ) {
+			builtInSerializer.serialize( it.next(), writer );
+
+			if ( it.hasNext() ) {
+				writer.write( ',' );
+			}
+		}
+
+		writer.write( ']' );
+	}
 }

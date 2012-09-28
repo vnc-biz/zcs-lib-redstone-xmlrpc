@@ -26,38 +26,35 @@ package redstone.xmlrpc;
  *  @author  Greger Olsson
  */
 
-public class XmlRpcFault extends Exception
-{
-    /**
-     *  Creates a new exception with the supplied message and error code.
-     *  The message and error code values are those returned from the remote
-     *  XML-RPC service.
-     *
-     *  @param message The exception message.
-     */
+public class XmlRpcFault extends Exception {
+	/**
+	 *  Creates a new exception with the supplied message and error code.
+	 *  The message and error code values are those returned from the remote
+	 *  XML-RPC service.
+	 *
+	 *  @param message The exception message.
+	 */
 
-    public XmlRpcFault( int errorCode, String message )
-    {
-        super( message );
-        this.errorCode = errorCode;
-    }
+	public XmlRpcFault( int errorCode, String message ) {
+		super( message );
+		this.errorCode = errorCode;
+	}
 
 
-    /**
-     *  Returns the error code reported by the remote XML-RPC service.
-     * 
-     *  @return the error code reported by the XML-RPC service.
-     */
-    
-    public int getErrorCode()
-    {
-        return errorCode;
-    }
+	/**
+	 *  Returns the error code reported by the remote XML-RPC service.
+	 *
+	 *  @return the error code reported by the XML-RPC service.
+	 */
 
-    
-    /** The exception error code. See XML-RPC specification. */
-    public final int errorCode;
-    
-    /** Serial version UID. */
-    private static final long serialVersionUID = 3257566200450856503L;
+	public int getErrorCode() {
+		return errorCode;
+	}
+
+
+	/** The exception error code. See XML-RPC specification. */
+	public final int errorCode;
+
+	/** Serial version UID. */
+	private static final long serialVersionUID = 3257566200450856503L;
 }

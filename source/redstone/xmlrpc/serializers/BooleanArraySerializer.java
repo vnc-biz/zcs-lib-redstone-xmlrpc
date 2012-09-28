@@ -24,43 +24,39 @@ import redstone.xmlrpc.XmlRpcSerializer;
 
 /**
  *  Serializes arrays of booleans.
- * 
+ *
  *  @author Greger Olsson
  */
 
-public class BooleanArraySerializer implements XmlRpcCustomSerializer
-{
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
-     */
-    
-    public Class getSupportedClass()
-    {
-        return boolean[].class;
-    }
+public class BooleanArraySerializer implements XmlRpcCustomSerializer {
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
+	 */
+
+	public Class getSupportedClass() {
+		return boolean[].class;
+	}
 
 
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
-     */
-    
-    public void serialize(
-        Object value,
-        Writer writer,
-        XmlRpcSerializer builtInSerializer )
-        throws XmlRpcException, IOException
-    {
-        writer.write( "<array><data>" );
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
+	 */
 
-        boolean[] array = ( boolean[] ) value;
+	public void serialize(
+	    Object value,
+	    Writer writer,
+	    XmlRpcSerializer builtInSerializer )
+	throws XmlRpcException, IOException {
+		writer.write( "<array><data>" );
 
-        for ( int i = 0; i < array.length; ++i )
-        {
-            writer.write( "<value><boolean>" );
-            writer.write( array[ i ] == true ? "1" : "0" );
-            writer.write( "</boolean></value>" );
-        }
+		boolean[] array = ( boolean[] ) value;
 
-        writer.write( "</data></array>" );
-    }
+		for ( int i = 0; i < array.length; ++i ) {
+			writer.write( "<value><boolean>" );
+			writer.write( array[ i ] == true ? "1" : "0" );
+			writer.write( "</boolean></value>" );
+		}
+
+		writer.write( "</data></array>" );
+	}
 }

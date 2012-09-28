@@ -24,43 +24,39 @@ import redstone.xmlrpc.XmlRpcSerializer;
 
 /**
  *  Serializes arrays of primitive doubles.
- *  
+ *
  *  @author Greger Olsson
  */
 
-public class DoubleArraySerializer implements XmlRpcCustomSerializer
-{
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
-     */
-    
-    public Class getSupportedClass()
-    {
-        return double[].class;
-    }
+public class DoubleArraySerializer implements XmlRpcCustomSerializer {
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
+	 */
+
+	public Class getSupportedClass() {
+		return double[].class;
+	}
 
 
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
-     */
-    
-    public void serialize(
-        Object value,
-        Writer writer,
-        XmlRpcSerializer builtInSerializer )
-        throws XmlRpcException, IOException
-    {
-        writer.write( "<array><data>" );
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
+	 */
 
-        double[] array = ( double[] ) value;
+	public void serialize(
+	    Object value,
+	    Writer writer,
+	    XmlRpcSerializer builtInSerializer )
+	throws XmlRpcException, IOException {
+		writer.write( "<array><data>" );
 
-        for ( int i = 0; i < array.length; ++i )
-        {
-            writer.write( "<value><double>" );
-            writer.write( Double.toString( array[ i ] ) );
-            writer.write( "</double></value>" );
-        }
+		double[] array = ( double[] ) value;
 
-        writer.write( "</data></array>" );
-    }
+		for ( int i = 0; i < array.length; ++i ) {
+			writer.write( "<value><double>" );
+			writer.write( Double.toString( array[ i ] ) );
+			writer.write( "</double></value>" );
+		}
+
+		writer.write( "</data></array>" );
+	}
 }

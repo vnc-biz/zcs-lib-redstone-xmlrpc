@@ -30,148 +30,129 @@ import redstone.xmlrpc.util.Base64;
  *  @author Greger Olsson
  */
 
-public class XmlRpcValue
-{
-    /**
-     *  Constructs an XmlRpcValue initially assumed to be a string.
-     */
+public class XmlRpcValue {
+	/**
+	 *  Constructs an XmlRpcValue initially assumed to be a string.
+	 */
 
-    XmlRpcValue()
-    {
-        type = XmlRpcParser.STRING;
-    }
+	XmlRpcValue() {
+		type = XmlRpcParser.STRING;
+	}
 
 
-    /**
-     *  Sets the type of the value. If the type is a composite type, a corresponding
-     *  XmlRpcArray or XmlRpcStruct will be created to hold the nested values.
-     */
+	/**
+	 *  Sets the type of the value. If the type is a composite type, a corresponding
+	 *  XmlRpcArray or XmlRpcStruct will be created to hold the nested values.
+	 */
 
-    void setType( int type )
-    {
-        this.type = type;
+	void setType( int type ) {
+		this.type = type;
 
-        if ( type == XmlRpcParser.ARRAY )
-        {
-            value = new XmlRpcArray();
-        }
-        else if ( type == XmlRpcParser.STRUCT )
-        {
-            value = new XmlRpcStruct();
-        }
-    }
+		if ( type == XmlRpcParser.ARRAY ) {
+			value = new XmlRpcArray();
+		} else if ( type == XmlRpcParser.STRUCT ) {
+			value = new XmlRpcStruct();
+		}
+	}
 
 
-    /**
-     *  Processes the character data supplied by the parser. Depending on the current type
-     *  of the value, the data will be treated accordingly.
-     *  
-     *  @param charData the character data from the XML-RPC message.
-     */
+	/**
+	 *  Processes the character data supplied by the parser. Depending on the current type
+	 *  of the value, the data will be treated accordingly.
+	 *
+	 *  @param charData the character data from the XML-RPC message.
+	 */
 
-    void processCharacterData( String charData ) throws XmlRpcException
-    {
-        switch ( type )
-        {
-            case XmlRpcParser.STRING:
+	void processCharacterData( String charData ) throws XmlRpcException {
+		switch ( type ) {
+			case XmlRpcParser.STRING:
 
-                value = charData;
-                break;
+				value = charData;
+				break;
 
-            case XmlRpcParser.I4:
-            case XmlRpcParser.INT:
+			case XmlRpcParser.I4:
+			case XmlRpcParser.INT:
 
-                value = new Integer( charData );
-                break;
+				value = new Integer( charData );
+				break;
 
-            case XmlRpcParser.I8:
-                
-                value = new Long( charData );
-                break;
-                
-            case XmlRpcParser.BOOLEAN:
+			case XmlRpcParser.I8:
 
-                value = new Boolean( Integer.parseInt( charData ) == 1 );
-                break;
+				value = new Long( charData );
+				break;
 
-            case XmlRpcParser.DOUBLE:
+			case XmlRpcParser.BOOLEAN:
 
-                value = new Double( charData );
-                break;
+				value = new Boolean( Integer.parseInt( charData ) == 1 );
+				break;
 
-            case XmlRpcParser.DATE:
+			case XmlRpcParser.DOUBLE:
 
-                try
-                {
-                    // TODO Optimize.
-                    synchronized( dateFormatter )
-                    {
-                        value = dateFormatter.parse( charData );
-                    }
-                }
-                catch( ParseException e )
-                {
-                    throw new XmlRpcException(
-                        XmlRpcMessages.getString( "XmlRpcValue.IllegalDate" ) + charData, e );
-                }
-                break;
+				value = new Double( charData );
+				break;
 
-            case XmlRpcParser.BASE64:
+			case XmlRpcParser.DATE:
 
-                value = Base64.decode( charData.getBytes() );
-                break;
+				try {
+					// TODO Optimize.
+					synchronized( dateFormatter ) {
+						value = dateFormatter.parse( charData );
+					}
+				} catch( ParseException e ) {
+					throw new XmlRpcException(
+					    XmlRpcMessages.getString( "XmlRpcValue.IllegalDate" ) + charData, e );
+				}
+				break;
 
-            case XmlRpcParser.STRUCT:
+			case XmlRpcParser.BASE64:
 
-                memberName = charData;
-                break;
-        }
-    }
+				value = Base64.decode( charData.getBytes() );
+				break;
+
+			case XmlRpcParser.STRUCT:
+
+				memberName = charData;
+				break;
+		}
+	}
 
 
-    /**
-     *  Adds a child value to this value, if it is of composite type (array or struct).
-     *  
-     *  @param value The nested valued of this value.
-     */
+	/**
+	 *  Adds a child value to this value, if it is of composite type (array or struct).
+	 *
+	 *  @param value The nested valued of this value.
+	 */
 
-    void addChildValue( XmlRpcValue childValue )
-    {
-        if ( type == XmlRpcParser.ARRAY )
-        {
-            ( ( XmlRpcArray ) value ).add( childValue.value );
-        }
-        else if ( type == XmlRpcParser.STRUCT )
-        {
-            ( ( XmlRpcStruct ) value ).put( memberName, childValue.value );
-        }
-        else
-        {
-            throw new XmlRpcException(
-                XmlRpcMessages.getString( "XmlRpcValue.UnexpectedNestedValue" ) );
-        }
-    }
+	void addChildValue( XmlRpcValue childValue ) {
+		if ( type == XmlRpcParser.ARRAY ) {
+			( ( XmlRpcArray ) value ).add( childValue.value );
+		} else if ( type == XmlRpcParser.STRUCT ) {
+			( ( XmlRpcStruct ) value ).put( memberName, childValue.value );
+		} else {
+			throw new XmlRpcException(
+			    XmlRpcMessages.getString( "XmlRpcValue.UnexpectedNestedValue" ) );
+		}
+	}
 
 
-    /**
-     *  @todo describe.
-     */
+	/**
+	 *  @todo describe.
+	 */
 
-    public int hashCode()
-    {
-        return type;
-    }
+	public int hashCode() {
+		return type;
+	}
 
 
-    /** The encapsulated, interpreted value */
-    Object value;
+	/** The encapsulated, interpreted value */
+	Object value;
 
-    /** The type of the value (see XmlRpcParser) */
-    int type;
+	/** The type of the value (see XmlRpcParser) */
+	int type;
 
-    /** If this is a struct value, this holds the member name */
-    String memberName;
+	/** If this is a struct value, this holds the member name */
+	String memberName;
 
-    /** Date formatter shared by all XmlRpcValues */
-    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyyMMdd'T'HH:mm:ss" );
+	/** Date formatter shared by all XmlRpcValues */
+	private static final SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyyMMdd'T'HH:mm:ss" );
 }

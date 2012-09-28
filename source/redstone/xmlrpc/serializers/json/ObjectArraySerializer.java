@@ -30,42 +30,37 @@ import redstone.xmlrpc.XmlRpcSerializer;
  *  @author Greger Olsson
  */
 
-public class ObjectArraySerializer implements XmlRpcCustomSerializer
-{
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
-     */
-    
-    public Class getSupportedClass()
-    {
-        return Object[].class;
-    }
+public class ObjectArraySerializer implements XmlRpcCustomSerializer {
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
+	 */
+
+	public Class getSupportedClass() {
+		return Object[].class;
+	}
 
 
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
-     */
-    
-    public void serialize(
-        Object value,
-        Writer writer,
-        XmlRpcSerializer builtInSerializer )
-        throws XmlRpcException, IOException
-    {
-        writer.write( '[' );
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
+	 */
 
-        Object[] array = ( Object[] ) value;
+	public void serialize(
+	    Object value,
+	    Writer writer,
+	    XmlRpcSerializer builtInSerializer )
+	throws XmlRpcException, IOException {
+		writer.write( '[' );
 
-        for ( int i = 0; i < array.length; ++i )
-        {
-            builtInSerializer.serialize( array[ i ], writer );
-            
-            if ( i < array.length - 1 )
-            {
-                writer.write( ',' );
-            }
-        }
+		Object[] array = ( Object[] ) value;
 
-        writer.write( ']' );
-    }
+		for ( int i = 0; i < array.length; ++i ) {
+			builtInSerializer.serialize( array[ i ], writer );
+
+			if ( i < array.length - 1 ) {
+				writer.write( ',' );
+			}
+		}
+
+		writer.write( ']' );
+	}
 }

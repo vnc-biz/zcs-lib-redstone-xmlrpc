@@ -28,147 +28,126 @@ import java.util.Date;
  *  Date, and byte arrays. For other types of objects, custom serializers need to be
  *  registered. The Redstone XML-RPC library comes with a set of useful serializers for
  *  collections and other types of objects. @see the redstone.xmlrpc.serializers.json .
- *  
+ *
  *  Although this is not what you would expect to find in an XML-RPC library, implementing
  *  a JSON serializer required very little effort and gives great value for JavaScript
  *  clients that wants to use XML-RPC services in their AJAX implementations. It is easy
  *  to create XML-RPC compatible messages in JavaScript but less easy to parse the response
  *  which is not required using this format, just use eval( responseText ) to get a
  *  JavaScript object.
- *  
+ *
  *  TODO Change synchronization of global dateFormatter to prevent bottleneck.
  *
  *  @author  Greger Olsson
  */
 
-public class XmlRpcJsonSerializer extends XmlRpcSerializer
-{
-    /**
-     *  Constructor adding all core custom serializers.
-     */
+public class XmlRpcJsonSerializer extends XmlRpcSerializer {
+	/**
+	 *  Constructor adding all core custom serializers.
+	 */
 
-    public XmlRpcJsonSerializer()
-    {
-        this( true );
-    }    
-    
+	public XmlRpcJsonSerializer() {
+		this( true );
+	}
 
-    /**
-     *  Constructor that may add all the custom serializers in the library
-     *  (which is almost always what you want).
-     *  
-     *  @param addCustomSerializers Indicates if the core custom serializers should be added.
-     */
 
-    public XmlRpcJsonSerializer( boolean addCustomSerializers )
-    {
-        super( false );
+	/**
+	 *  Constructor that may add all the custom serializers in the library
+	 *  (which is almost always what you want).
+	 *
+	 *  @param addCustomSerializers Indicates if the core custom serializers should be added.
+	 */
 
-        if ( addCustomSerializers )
-        {
-            customSerializers.add( new redstone.xmlrpc.serializers.json.MapSerializer() );
-            customSerializers.add( new redstone.xmlrpc.serializers.json.ListSerializer() );
-            customSerializers.add( new redstone.xmlrpc.serializers.json.CollectionSerializer() );
-            customSerializers.add( new redstone.xmlrpc.serializers.json.ObjectArraySerializer() );
-            customSerializers.add( new redstone.xmlrpc.serializers.json.IntArraySerializer() );
-            customSerializers.add( new redstone.xmlrpc.serializers.json.FloatArraySerializer() );
-            customSerializers.add( new redstone.xmlrpc.serializers.json.DoubleArraySerializer() );
-            customSerializers.add( new redstone.xmlrpc.serializers.json.BooleanArraySerializer() );
-            customSerializers.add( new redstone.xmlrpc.serializers.json.IntrospectingSerializer() );
-        }
-    }
-    
+	public XmlRpcJsonSerializer( boolean addCustomSerializers ) {
+		super( false );
 
-    /**
-     *  Overrides the default serializing mechanism to use JSON format instead.
-     */
-    
-    public void writeEnvelopeHeader( Object value, Writer writer ) throws IOException
-    {
-        writer.write( '(' );
-    }
-    
-    
-    /**
-     *  Overrides the default serializing mechanism to use JSON format instead.
-     */
-    
-    public void writeEnvelopeFooter( Object value, Writer writer ) throws IOException
-    {
-        writer.write( ')' );
-    }
+		if ( addCustomSerializers ) {
+			customSerializers.add( new redstone.xmlrpc.serializers.json.MapSerializer() );
+			customSerializers.add( new redstone.xmlrpc.serializers.json.ListSerializer() );
+			customSerializers.add( new redstone.xmlrpc.serializers.json.CollectionSerializer() );
+			customSerializers.add( new redstone.xmlrpc.serializers.json.ObjectArraySerializer() );
+			customSerializers.add( new redstone.xmlrpc.serializers.json.IntArraySerializer() );
+			customSerializers.add( new redstone.xmlrpc.serializers.json.FloatArraySerializer() );
+			customSerializers.add( new redstone.xmlrpc.serializers.json.DoubleArraySerializer() );
+			customSerializers.add( new redstone.xmlrpc.serializers.json.BooleanArraySerializer() );
+			customSerializers.add( new redstone.xmlrpc.serializers.json.IntrospectingSerializer() );
+		}
+	}
 
-    
-    /**
-     *  Overrides the default serializing mechanism to use JSON format instead.
-     */
-    
-    public void writeError( String message, Writer writer ) throws IOException
-    {
-        writer.write( '\'' );
-        writer.write( message );
-        writer.write( '\'' );
-    }
-    
 
-    /**
-     *  Overrides the default serializing mechanism to use JSON format instead.
-     */
+	/**
+	 *  Overrides the default serializing mechanism to use JSON format instead.
+	 */
 
-    public void serialize(
-        Object value,
-        Writer writer )
-        throws XmlRpcException, IOException
-    {
-        if ( value instanceof String || value instanceof Character )
-        {
-            writer.write( '\'' );
-            writer.write( value.toString() );
-            writer.write( '\'' );
-        }
-        else if ( value instanceof Number || value instanceof Boolean )
-        {
-            writer.write( value.toString() );
-        }
-        else if ( value instanceof java.util.Calendar )
-        {
-            writer.write( "new Date('" );
-            synchronized( dateFormatter )
-            {
-                writer.write( dateFormatter.format( ( ( Calendar ) value ).getTime() ) );
-            }
-            writer.write( "')" );
-        }
-        else if ( value instanceof java.util.Date )
-        {
-            writer.write( "new Date('" );
-            synchronized( dateFormatter )
-            {
-                writer.write( dateFormatter.format( ( Date ) value ) );
-            }
-            writer.write( "')" );
-        }
-        else
-        {
-            // Value was not of basic type, see if there's a custom serializer
-            // registered for it.
+	public void writeEnvelopeHeader( Object value, Writer writer ) throws IOException {
+		writer.write( '(' );
+	}
 
-            for ( int i = 0; i < customSerializers.size(); ++i )
-            {
-                XmlRpcCustomSerializer serializer = ( XmlRpcCustomSerializer ) customSerializers.get( i );
 
-                if ( serializer.getSupportedClass().isInstance( value ) )
-                {
-                    serializer.serialize( value, writer, this );
-                    return;
-                }
-            }
+	/**
+	 *  Overrides the default serializing mechanism to use JSON format instead.
+	 */
 
-            throw new XmlRpcException(
-                XmlRpcMessages.getString( "XmlRpcSerializer.UnsupportedType" ) + value.getClass() );
-        }
-    }
-    
-    /** Shared date formatter shared. */
-    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyy-dd-mm HH:mm:ss" );
+	public void writeEnvelopeFooter( Object value, Writer writer ) throws IOException {
+		writer.write( ')' );
+	}
+
+
+	/**
+	 *  Overrides the default serializing mechanism to use JSON format instead.
+	 */
+
+	public void writeError( String message, Writer writer ) throws IOException {
+		writer.write( '\'' );
+		writer.write( message );
+		writer.write( '\'' );
+	}
+
+
+	/**
+	 *  Overrides the default serializing mechanism to use JSON format instead.
+	 */
+
+	public void serialize(
+	    Object value,
+	    Writer writer )
+	throws XmlRpcException, IOException {
+		if ( value instanceof String || value instanceof Character ) {
+			writer.write( '\'' );
+			writer.write( value.toString() );
+			writer.write( '\'' );
+		} else if ( value instanceof Number || value instanceof Boolean ) {
+			writer.write( value.toString() );
+		} else if ( value instanceof java.util.Calendar ) {
+			writer.write( "new Date('" );
+			synchronized( dateFormatter ) {
+				writer.write( dateFormatter.format( ( ( Calendar ) value ).getTime() ) );
+			}
+			writer.write( "')" );
+		} else if ( value instanceof java.util.Date ) {
+			writer.write( "new Date('" );
+			synchronized( dateFormatter ) {
+				writer.write( dateFormatter.format( ( Date ) value ) );
+			}
+			writer.write( "')" );
+		} else {
+			// Value was not of basic type, see if there's a custom serializer
+			// registered for it.
+
+			for ( int i = 0; i < customSerializers.size(); ++i ) {
+				XmlRpcCustomSerializer serializer = ( XmlRpcCustomSerializer ) customSerializers.get( i );
+
+				if ( serializer.getSupportedClass().isInstance( value ) ) {
+					serializer.serialize( value, writer, this );
+					return;
+				}
+			}
+
+			throw new XmlRpcException(
+			    XmlRpcMessages.getString( "XmlRpcSerializer.UnsupportedType" ) + value.getClass() );
+		}
+	}
+
+	/** Shared date formatter shared. */
+	private static final SimpleDateFormat dateFormatter = new SimpleDateFormat( "yyyy-dd-mm HH:mm:ss" );
 }

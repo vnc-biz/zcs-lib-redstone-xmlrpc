@@ -32,206 +32,180 @@ import javax.servlet.http.HttpServletResponse;
  *  @author Greger Olsson
  */
 
-public class XmlRpcServlet extends HttpServlet
-{
-    /**
-     *  Initializes the servlet by instantiating the XmlRpcServer that will
-     *  hold all invocation handlers and processors. The servlet configuration
-     *  is read to see if the XML-RPC responses generated should be streamed
-     *  immediately to the resonse (non-compliant) or if they should be buffered
-     *  before being sent (compliant, since then the Content-Length header may
-     *  be set, as stipulated by the XML-RPC specification).<p>
-     *  
-     *  Further, the configuration is read to see if any services are mentioned
-     *  declaratively that are to be instantiated and published. An alternative
-     *  to this is to create a new servlet class extending from XmlRpcServlet
-     *  that publishes services programmatically.
-     */
+public class XmlRpcServlet extends HttpServlet {
+	/**
+	 *  Initializes the servlet by instantiating the XmlRpcServer that will
+	 *  hold all invocation handlers and processors. The servlet configuration
+	 *  is read to see if the XML-RPC responses generated should be streamed
+	 *  immediately to the resonse (non-compliant) or if they should be buffered
+	 *  before being sent (compliant, since then the Content-Length header may
+	 *  be set, as stipulated by the XML-RPC specification).<p>
+	 *
+	 *  Further, the configuration is read to see if any services are mentioned
+	 *  declaratively that are to be instantiated and published. An alternative
+	 *  to this is to create a new servlet class extending from XmlRpcServlet
+	 *  that publishes services programmatically.
+	 */
 
-    public void init( ServletConfig config ) throws ServletException
-    {
-        String services = config.getInitParameter( "services" );
-        String contentType = config.getInitParameter( "contentType" );
-        String streamMessages = config.getInitParameter( "streamMessages" );
+	public void init( ServletConfig config ) throws ServletException {
+		String services = config.getInitParameter( "services" );
+		String contentType = config.getInitParameter( "contentType" );
+		String streamMessages = config.getInitParameter( "streamMessages" );
 
-        if ( streamMessages != null && streamMessages.equals( "1" ) )
-        {
-            this.streamMessages = true;
-        }
-        
-        if ( contentType != null && contentType.startsWith( "text/javascript+json" ) )
-        {
-            this.contentType = "text/javascript+json";
-            server = new XmlRpcServer( new XmlRpcJsonSerializer() );
-        }
-        else
-        {
-            this.contentType = "text/xml";
-            server = new XmlRpcServer();
-        }
-        
-        this.contentType += "; charset=" + XmlRpcMessages.getString( "XmlRpcServlet.Encoding" );
-        
-        if ( services != null )
-        {
-            addInvocationHandlers( services );
-        }
-    }
+		if ( streamMessages != null && streamMessages.equals( "1" ) ) {
+			this.streamMessages = true;
+		}
 
-    
-    /**
-     *  Returns the XmlRpcServer that is backing the servlet.
-     * 
-     *  @return The XmlRpcServer backing the servlet.
-     */
-    
-    public XmlRpcServer getXmlRpcServer()
-    {
-        return server;
-    }
+		if ( contentType != null && contentType.startsWith( "text/javascript+json" ) ) {
+			this.contentType = "text/javascript+json";
+			server = new XmlRpcServer( new XmlRpcJsonSerializer() );
+		} else {
+			this.contentType = "text/xml";
+			server = new XmlRpcServer();
+		}
 
-    
-    /**
-     *  Indicates whether or not messages are streamed or if they are built in memory
-     *  to be able to calculate the HTTP Content-Length.
-     * 
-     *  @return True if messages are streamed directly over the socket as it is built.
-     */
-    
-    public boolean getStreamMessages()
-    {
-        return streamMessages;
-    }
+		this.contentType += "; charset=" + XmlRpcMessages.getString( "XmlRpcServlet.Encoding" );
 
-    
-    /**
-     *  Returns the content type of the messages returned from the servlet which is
-     *  text/xml for XML-RPC messages and text/javascript+json for JSON messages.
-     * 
-     *  @return The content type of the messages returned from this servlet.
-     */
-    
-    public String getContentType()
-    {
-        return contentType;
-    }
-    
-    
-    /**
-     *  Handles reception of XML-RPC messages.
-     * 
-     *  @param req
-     *  @param res
-     *  @throws ServletException
-     *  @throws IOException
-     */
-    
-    public void doPost(
-        HttpServletRequest req,
-        HttpServletResponse res)
-        throws ServletException, IOException
-    {
-        res.setCharacterEncoding( XmlRpcMessages.getString( "XmlRpcServlet.Encoding" ) );
-        res.setContentType( contentType );
+		if ( services != null ) {
+			addInvocationHandlers( services );
+		}
+	}
 
-        if ( streamMessages )
-        {
-            server.execute( req.getInputStream(), res.getWriter() );
-            res.getWriter().flush();
-        }
-        else
-        {
-            Writer responseWriter = new StringWriter( 2048 );
-            server.execute( req.getInputStream(), responseWriter );
-            String response = responseWriter.toString(); // TODO EXPENSIVE!!
-            res.setContentLength( response.length() );
 
-            responseWriter = res.getWriter();
-            responseWriter.write( response );
-            responseWriter.flush();
-        }
-    }
+	/**
+	 *  Returns the XmlRpcServer that is backing the servlet.
+	 *
+	 *  @return The XmlRpcServer backing the servlet.
+	 */
 
-    
-    /**
-     *  Adds invocation handlers based on the service classes mentioned in the supplied
-     *  services string.
-     * 
-     *  @param services List of services specified as fully qualified class names separated
-     *                  by whitespace (tabs, spaces, newlines). Each class name is also prefixed
-     *                  by the name of the service to use for the class:
-     *                  <pre>
-     *    <init-param>
-     *        <param-name>services</param-name>
-     *        <param-value>
-     *            SimpleDatabase:java.util.HashMap
-     *            RandomNumberGenerator:java.util.Random
-     *        </param-value>
-     *    </init-param>
-     *                  </pre>
-     *                  
-     *  @throws ServletException If the services argument is invalid or contains names of
-     *                           classes that cannot be loaded and instantiated.
-     */
+	public XmlRpcServer getXmlRpcServer() {
+		return server;
+	}
 
-    private void addInvocationHandlers( String services ) throws ServletException
-    {
-        StringTokenizer tokenizer = new StringTokenizer( services );
-        
-        while ( tokenizer.hasMoreTokens() )
-        {
-            String service = tokenizer.nextToken();
-            int separatorIndex = service.indexOf( ':' );
 
-            if ( separatorIndex > -1 )
-            {
-                String serviceName = service.substring( 0, separatorIndex );
-                String className = service.substring( separatorIndex + 1 );
-                
-                try
-                {
-                    Class serviceClass = Class.forName( className );
-                    Object invocationHandler = serviceClass.newInstance();
-                    server.addInvocationHandler( serviceName, invocationHandler );
-                }
-                catch ( ClassNotFoundException e )
-                {
-                    throw new ServletException(
-                        XmlRpcMessages.getString(
-                            "XmlRpcServlet.ServiceClassNotFound" ) + className, e );
-                }
-                catch ( InstantiationException e )
-                {
-                    throw new ServletException(
-                        XmlRpcMessages.getString(
-                            "XmlRpcServlet.ServiceClassNotInstantiable" ) + className, e );
-                }
-                catch ( IllegalAccessException e )
-                {
-                    throw new ServletException(
-                        XmlRpcMessages.getString(
-                            "XmlRpcServlet.ServiceClassNotAccessible" ) + className, e );
-                }
-            }
-            else
-            {
-                throw new ServletException(
-                    XmlRpcMessages.getString(
-                        "XmlRpcServlet.InvalidServicesFormat" ) + services );
-            }
-        }
-    }
-    
+	/**
+	 *  Indicates whether or not messages are streamed or if they are built in memory
+	 *  to be able to calculate the HTTP Content-Length.
+	 *
+	 *  @return True if messages are streamed directly over the socket as it is built.
+	 */
 
-    /** The XmlRpcServer containing the handlers and processors. */
-    private XmlRpcServer server;
-    
-    /** Indicates whether or not response messages should be streamed. */
-    private boolean streamMessages;
+	public boolean getStreamMessages() {
+		return streamMessages;
+	}
 
-    /** <describe> */
-    private String contentType;
-    
-    /** Serial Version UID. */
-    private static final long serialVersionUID = 3544388119488050993L;
+
+	/**
+	 *  Returns the content type of the messages returned from the servlet which is
+	 *  text/xml for XML-RPC messages and text/javascript+json for JSON messages.
+	 *
+	 *  @return The content type of the messages returned from this servlet.
+	 */
+
+	public String getContentType() {
+		return contentType;
+	}
+
+
+	/**
+	 *  Handles reception of XML-RPC messages.
+	 *
+	 *  @param req
+	 *  @param res
+	 *  @throws ServletException
+	 *  @throws IOException
+	 */
+
+	public void doPost(
+	    HttpServletRequest req,
+	    HttpServletResponse res)
+	throws ServletException, IOException {
+		res.setCharacterEncoding( XmlRpcMessages.getString( "XmlRpcServlet.Encoding" ) );
+		res.setContentType( contentType );
+
+		if ( streamMessages ) {
+			server.execute( req.getInputStream(), res.getWriter() );
+			res.getWriter().flush();
+		} else {
+			Writer responseWriter = new StringWriter( 2048 );
+			server.execute( req.getInputStream(), responseWriter );
+			String response = responseWriter.toString(); // TODO EXPENSIVE!!
+			res.setContentLength( response.length() );
+
+			responseWriter = res.getWriter();
+			responseWriter.write( response );
+			responseWriter.flush();
+		}
+	}
+
+
+	/**
+	 *  Adds invocation handlers based on the service classes mentioned in the supplied
+	 *  services string.
+	 *
+	 *  @param services List of services specified as fully qualified class names separated
+	 *                  by whitespace (tabs, spaces, newlines). Each class name is also prefixed
+	 *                  by the name of the service to use for the class:
+	 *                  <pre>
+	 *    <init-param>
+	 *        <param-name>services</param-name>
+	 *        <param-value>
+	 *            SimpleDatabase:java.util.HashMap
+	 *            RandomNumberGenerator:java.util.Random
+	 *        </param-value>
+	 *    </init-param>
+	 *                  </pre>
+	 *
+	 *  @throws ServletException If the services argument is invalid or contains names of
+	 *                           classes that cannot be loaded and instantiated.
+	 */
+
+	private void addInvocationHandlers( String services ) throws ServletException {
+		StringTokenizer tokenizer = new StringTokenizer( services );
+
+		while ( tokenizer.hasMoreTokens() ) {
+			String service = tokenizer.nextToken();
+			int separatorIndex = service.indexOf( ':' );
+
+			if ( separatorIndex > -1 ) {
+				String serviceName = service.substring( 0, separatorIndex );
+				String className = service.substring( separatorIndex + 1 );
+
+				try {
+					Class serviceClass = Class.forName( className );
+					Object invocationHandler = serviceClass.newInstance();
+					server.addInvocationHandler( serviceName, invocationHandler );
+				} catch ( ClassNotFoundException e ) {
+					throw new ServletException(
+					    XmlRpcMessages.getString(
+					        "XmlRpcServlet.ServiceClassNotFound" ) + className, e );
+				} catch ( InstantiationException e ) {
+					throw new ServletException(
+					    XmlRpcMessages.getString(
+					        "XmlRpcServlet.ServiceClassNotInstantiable" ) + className, e );
+				} catch ( IllegalAccessException e ) {
+					throw new ServletException(
+					    XmlRpcMessages.getString(
+					        "XmlRpcServlet.ServiceClassNotAccessible" ) + className, e );
+				}
+			} else {
+				throw new ServletException(
+				    XmlRpcMessages.getString(
+				        "XmlRpcServlet.InvalidServicesFormat" ) + services );
+			}
+		}
+	}
+
+
+	/** The XmlRpcServer containing the handlers and processors. */
+	private XmlRpcServer server;
+
+	/** Indicates whether or not response messages should be streamed. */
+	private boolean streamMessages;
+
+	/** <describe> */
+	private String contentType;
+
+	/** Serial Version UID. */
+	private static final long serialVersionUID = 3544388119488050993L;
 }

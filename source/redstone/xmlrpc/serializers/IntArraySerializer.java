@@ -24,43 +24,39 @@ import redstone.xmlrpc.XmlRpcSerializer;
 
 /**
  *  Serializes arrays of primitive integers.
- * 
+ *
  *  @author Greger Olsson
  */
 
-public class IntArraySerializer implements XmlRpcCustomSerializer
-{
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
-     */
-    
-    public Class getSupportedClass()
-    {
-        return int[].class;
-    }
+public class IntArraySerializer implements XmlRpcCustomSerializer {
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
+	 */
+
+	public Class getSupportedClass() {
+		return int[].class;
+	}
 
 
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
-     */
-    
-    public void serialize(
-        Object value,
-        Writer writer,
-        XmlRpcSerializer builtInSerializer )
-        throws XmlRpcException, IOException
-    {
-        writer.write( "<array><data>" );
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
+	 */
 
-        int[] array = ( int[] ) value;
+	public void serialize(
+	    Object value,
+	    Writer writer,
+	    XmlRpcSerializer builtInSerializer )
+	throws XmlRpcException, IOException {
+		writer.write( "<array><data>" );
 
-        for ( int i = 0; i < array.length; ++i )
-        {
-            writer.write( "<value><i4>" );
-            writer.write( Integer.toString( array[ i ] ) );
-            writer.write( "</i4></value>" );
-        }
+		int[] array = ( int[] ) value;
 
-        writer.write( "</data></array>" );
-    }
+		for ( int i = 0; i < array.length; ++i ) {
+			writer.write( "<value><i4>" );
+			writer.write( Integer.toString( array[ i ] ) );
+			writer.write( "</i4></value>" );
+		}
+
+		writer.write( "</data></array>" );
+	}
 }

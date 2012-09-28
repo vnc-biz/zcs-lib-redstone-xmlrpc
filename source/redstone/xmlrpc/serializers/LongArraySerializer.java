@@ -27,69 +27,61 @@ import redstone.xmlrpc.XmlRpcSerializer;
  *  setUseApacheExtension( true ) has been invoked, the longs are demoted to
  *  integers before being serialized into regular XML-RPC &lt;i4>'s, possibly
  *  losing significant bits in the conversion.<p>
- * 
+ *
  *  @author Greger Olsson
  */
 
-public class LongArraySerializer implements XmlRpcCustomSerializer
-{
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
-     */
-    
-    public Class getSupportedClass()
-    {
-        return long[].class;
-    }
+public class LongArraySerializer implements XmlRpcCustomSerializer {
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
+	 */
 
-    
-    /**
-     *  Sets whether or not to use the &lt;i8> Apache extensions when
-     *  serializing longs.
-     *
-     *  @param useApacheExtension Flag for specifying the Apache extension to be used.
-     */
+	public Class getSupportedClass() {
+		return long[].class;
+	}
 
-    public void setUseApacheExtension( boolean useApacheExtension )
-    {
-        this.useApacheExtension = useApacheExtension;
-    }
-    
 
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
-     */
-    
-    public void serialize(
-        Object value,
-        Writer writer,
-        XmlRpcSerializer builtInSerializer )
-        throws XmlRpcException, IOException
-    {
-        writer.write( "<array><data>" );
+	/**
+	 *  Sets whether or not to use the &lt;i8> Apache extensions when
+	 *  serializing longs.
+	 *
+	 *  @param useApacheExtension Flag for specifying the Apache extension to be used.
+	 */
 
-        long[] array = ( long[] ) value;
+	public void setUseApacheExtension( boolean useApacheExtension ) {
+		this.useApacheExtension = useApacheExtension;
+	}
 
-        for ( int i = 0; i < array.length; ++i )
-        {
-            if ( !useApacheExtension )
-            {
-                writer.write( "<value><i4>" );
-                writer.write( Integer.toString( ( int ) array[ i ] ) );
-                writer.write( "</i4></value>" );
-            }
-            else
-            {
-                writer.write( "<value><i8 xmlns=\"http://ws.apache.org/xmlrpc/namespaces/extensions\">" );
-                writer.write( Long.toString( array[ i ] ) );
-                writer.write( "</i8></value>" );
-            }
-        }
 
-        writer.write( "</data></array>" );
-    }
-    
-    
-    /** Flag indicating whether or not the Apache &lt;i8> extension should be used. */
-    private boolean useApacheExtension;
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
+	 */
+
+	public void serialize(
+	    Object value,
+	    Writer writer,
+	    XmlRpcSerializer builtInSerializer )
+	throws XmlRpcException, IOException {
+		writer.write( "<array><data>" );
+
+		long[] array = ( long[] ) value;
+
+		for ( int i = 0; i < array.length; ++i ) {
+			if ( !useApacheExtension ) {
+				writer.write( "<value><i4>" );
+				writer.write( Integer.toString( ( int ) array[ i ] ) );
+				writer.write( "</i4></value>" );
+			} else {
+				writer.write( "<value><i8 xmlns=\"http://ws.apache.org/xmlrpc/namespaces/extensions\">" );
+				writer.write( Long.toString( array[ i ] ) );
+				writer.write( "</i8></value>" );
+			}
+		}
+
+		writer.write( "</data></array>" );
+	}
+
+
+	/** Flag indicating whether or not the Apache &lt;i8> extension should be used. */
+	private boolean useApacheExtension;
 }

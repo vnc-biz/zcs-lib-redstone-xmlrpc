@@ -29,57 +29,56 @@ package redstone.xmlrpc;
  *  @author Greger Olsson
  */
 
-public interface XmlRpcInvocationInterceptor
-{
-    /**
-     *  Called by an XmlRpcServer before the method with the supplied name is called.
-     *  The arguments list may be altered if necessary. The method must have matching
-     *  parameters, however.
-     *
-     *  <p>If, for some reason, the processor wishes to cancel the invocation altogether, it
-     *  returns false from this method. This may be the case for filtering processors where
-     *  certain IP-addresses are restricted from particular methods, or if the arguments
-     *  contain some encrypted password and username that does not authorize.</p>
-     *
-     *  @param invocation The invocation intercepted by the processor. 
-     *
-     *  @return true if the invocation should proceed, or false if not.
-     */
+public interface XmlRpcInvocationInterceptor {
+	/**
+	 *  Called by an XmlRpcServer before the method with the supplied name is called.
+	 *  The arguments list may be altered if necessary. The method must have matching
+	 *  parameters, however.
+	 *
+	 *  <p>If, for some reason, the processor wishes to cancel the invocation altogether, it
+	 *  returns false from this method. This may be the case for filtering processors where
+	 *  certain IP-addresses are restricted from particular methods, or if the arguments
+	 *  contain some encrypted password and username that does not authorize.</p>
+	 *
+	 *  @param invocation The invocation intercepted by the processor.
+	 *
+	 *  @return true if the invocation should proceed, or false if not.
+	 */
 
-    boolean before( XmlRpcInvocation invocation );
-
-
-    /**
-     *  Called by an XmlRpcServer after the supplied method has been called. The
-     *  processor may alter the return value, if it wants, before the response is
-     *  created. This may be useful if the information therein should be encrypted
-     *  or compressed, for instance.
-     *  
-     *  <p>If the interceptor returns null it means that the call was intercepted
-     *  completely and that the interceptor itself is responsible of generating
-     *  a response to the caller through the java.io.Writer in the XmlRpcInvocation.
-     *  This makes it possible to write interceptors that override the whole
-     *  serialization mechanism to return customized content for invocations.</p>
-     *
-     *  @param invocation The invocation intercepted by the processor. 
-     *
-     *  @param returnValue The object returned by the method. If the method
-     *                     returned a primitive, it is wrapped in its object counterpart.
-     *
-     *  @return The (possibly modified) returnValue argument, or null if the interceptor
-     *          has intercepted the call completely and no value is to be returned.
-     */
-
-    Object after( XmlRpcInvocation invocation, Object returnValue );
+	boolean before( XmlRpcInvocation invocation );
 
 
-    /**
-     *  Called by an XmlRpcServer when the supplied method throws an exception.
-     *
-     *  @param invocation The invocation intercepted by the processor. 
-     *  
-     *  @param exception The exception thrown by the method.
-     */
+	/**
+	 *  Called by an XmlRpcServer after the supplied method has been called. The
+	 *  processor may alter the return value, if it wants, before the response is
+	 *  created. This may be useful if the information therein should be encrypted
+	 *  or compressed, for instance.
+	 *
+	 *  <p>If the interceptor returns null it means that the call was intercepted
+	 *  completely and that the interceptor itself is responsible of generating
+	 *  a response to the caller through the java.io.Writer in the XmlRpcInvocation.
+	 *  This makes it possible to write interceptors that override the whole
+	 *  serialization mechanism to return customized content for invocations.</p>
+	 *
+	 *  @param invocation The invocation intercepted by the processor.
+	 *
+	 *  @param returnValue The object returned by the method. If the method
+	 *                     returned a primitive, it is wrapped in its object counterpart.
+	 *
+	 *  @return The (possibly modified) returnValue argument, or null if the interceptor
+	 *          has intercepted the call completely and no value is to be returned.
+	 */
 
-    void onException( XmlRpcInvocation invocation, Throwable exception );
+	Object after( XmlRpcInvocation invocation, Object returnValue );
+
+
+	/**
+	 *  Called by an XmlRpcServer when the supplied method throws an exception.
+	 *
+	 *  @param invocation The invocation intercepted by the processor.
+	 *
+	 *  @param exception The exception thrown by the method.
+	 */
+
+	void onException( XmlRpcInvocation invocation, Throwable exception );
 }

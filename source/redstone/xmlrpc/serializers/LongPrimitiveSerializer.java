@@ -27,62 +27,55 @@ import redstone.xmlrpc.XmlRpcSerializer;
  *  has been invoked, the longs are demoted to integers before being serialized
  *  into regular XML-RPC &lt;i4>'s, possibly losing significant bits in the
  *  conversion.
- * 
+ *
  *  @author Greger Olsson
  */
 
-public class LongPrimitiveSerializer implements XmlRpcCustomSerializer
-{
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
-     */
-    
-    public Class getSupportedClass()
-    {
-        return long.class;
-    }
+public class LongPrimitiveSerializer implements XmlRpcCustomSerializer {
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
+	 */
+
+	public Class getSupportedClass() {
+		return long.class;
+	}
 
 
-    /**
-     *  Sets whether or not to use the &lt;i8> Apache extensions when
-     *  serializing longs.
-     *
-     *  @param useApacheExtension Flag for specifying the Apache extension to be used.
-     */
+	/**
+	 *  Sets whether or not to use the &lt;i8> Apache extensions when
+	 *  serializing longs.
+	 *
+	 *  @param useApacheExtension Flag for specifying the Apache extension to be used.
+	 */
 
-    public void setUseApacheExtension( boolean useApacheExtension )
-    {
-        this.useApacheExtension = useApacheExtension;
-    }
+	public void setUseApacheExtension( boolean useApacheExtension ) {
+		this.useApacheExtension = useApacheExtension;
+	}
 
-    
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
-     */
-    
-    public void serialize(
-        Object value,
-        Writer writer,
-        XmlRpcSerializer builtInSerializer )
-        throws XmlRpcException, IOException
-    {
-        Long longValue = ( Long ) value;
 
-        if ( !useApacheExtension )
-        {
-            writer.write( "<i4>" );
-            writer.write( Integer.toString( longValue.intValue() ) );
-            writer.write( "</i4>" );
-        }
-        else
-        {
-            writer.write( "<value><i8 xmlns=\"http://ws.apache.org/xmlrpc/namespaces/extensions\">" );
-            writer.write( Long.toString( longValue.longValue() ) );
-            writer.write( "</i8></value>" );
-        }
-    }
-    
-    
-    /** Flag indicating whether or not the Apache &lt;i8> extension should be used. */
-    private boolean useApacheExtension;
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
+	 */
+
+	public void serialize(
+	    Object value,
+	    Writer writer,
+	    XmlRpcSerializer builtInSerializer )
+	throws XmlRpcException, IOException {
+		Long longValue = ( Long ) value;
+
+		if ( !useApacheExtension ) {
+			writer.write( "<i4>" );
+			writer.write( Integer.toString( longValue.intValue() ) );
+			writer.write( "</i4>" );
+		} else {
+			writer.write( "<value><i8 xmlns=\"http://ws.apache.org/xmlrpc/namespaces/extensions\">" );
+			writer.write( Long.toString( longValue.longValue() ) );
+			writer.write( "</i8></value>" );
+		}
+	}
+
+
+	/** Flag indicating whether or not the Apache &lt;i8> extension should be used. */
+	private boolean useApacheExtension;
 }

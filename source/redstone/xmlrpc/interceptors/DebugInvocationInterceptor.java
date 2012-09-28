@@ -24,129 +24,113 @@ import redstone.xmlrpc.XmlRpcInvocationInterceptor;
  *  Simple invocation processor that traces the calls made through an XmlRpcServer.
  *  This is used for debugging purposes only. This may be replaced with a more
  *  competent logging processor that perhaps is only logging exceptions that occur.<p>
- *  
+ *
  *  Logging occurs either on System.out or on the servlet container log depending
  *  on if a ServletContext is supplied or not when constructing the interceptor.
  *
  *  @author Greger Olsson
  */
 
-public class DebugInvocationInterceptor implements XmlRpcInvocationInterceptor
-{
-    /**
-     *  Empty default constructor. Using this constructor rather than the
-     *  one accepting a ServletContext will cause the output to be printed
-     *  on System.out instead of the servlet container log.
-     */
+public class DebugInvocationInterceptor implements XmlRpcInvocationInterceptor {
+	/**
+	 *  Empty default constructor. Using this constructor rather than the
+	 *  one accepting a ServletContext will cause the output to be printed
+	 *  on System.out instead of the servlet container log.
+	 */
 
-    public DebugInvocationInterceptor()
-    {
-    }
+	public DebugInvocationInterceptor() {
+	}
 
 
-    /**
-     *  Constructs the interceptor while associating it with the supplied
-     *  servlet context. Output will be directed to the servlet container log.
-     *  
-     *  @param servletContext The servlet context to be used for logging.
-     */
-    
-    public DebugInvocationInterceptor( ServletContext servletContext )
-    {
-        this.servletContext = servletContext;
-    }
+	/**
+	 *  Constructs the interceptor while associating it with the supplied
+	 *  servlet context. Output will be directed to the servlet container log.
+	 *
+	 *  @param servletContext The servlet context to be used for logging.
+	 */
 
-    
-    /**
-     *  Outputs information bout the invocation, the method, and its arguments.
-     *  
-     *  @param invocation The invocation.
-     */
-
-    public boolean before( XmlRpcInvocation invocation )
-    {
-        StringBuffer message = new StringBuffer( 192 );
-
-        message.append( invocation.getInvocationId() )
-               .append( ": " )
-               .append( invocation.getHandlerName() )
-               .append( '.' )
-               .append( invocation.getMethodName() )
-               .append( invocation.getArguments().toString() );
-        
-        if ( servletContext != null )
-        {
-            servletContext.log( message.toString() );
-        }
-        else
-        {
-            System.out.println( message.toString() );
-        }
-        
-        return true;
-    }
+	public DebugInvocationInterceptor( ServletContext servletContext ) {
+		this.servletContext = servletContext;
+	}
 
 
-    /**
-     *  Prints trace info on the invocation return value.
-     *  
-     *  @param invocation The invocation.
-     *  @param returnValue The value returned from the method.
-     */
+	/**
+	 *  Outputs information bout the invocation, the method, and its arguments.
+	 *
+	 *  @param invocation The invocation.
+	 */
 
-    public Object after( XmlRpcInvocation invocation, Object returnValue )
-    {
-        StringBuffer message = new StringBuffer( 192 );
+	public boolean before( XmlRpcInvocation invocation ) {
+		StringBuffer message = new StringBuffer( 192 );
 
-        message.append( invocation.getInvocationId() )
-               .append( ": " )
-               .append( returnValue );
-        
-        if ( servletContext != null )
-        {
-            servletContext.log( message.toString() );
-        }
-        else
-        {
-            System.out.println( message.toString() );
-        }
+		message.append( invocation.getInvocationId() )
+		.append( ": " )
+		.append( invocation.getHandlerName() )
+		.append( '.' )
+		.append( invocation.getMethodName() )
+		.append( invocation.getArguments().toString() );
 
-        return returnValue;
-    }
+		if ( servletContext != null ) {
+			servletContext.log( message.toString() );
+		} else {
+			System.out.println( message.toString() );
+		}
+
+		return true;
+	}
 
 
-    /**
-     *  Prints trace info on the invocation exception.
-     *
-     *  @param invocation The invocation.
-     *  @param exception The exception thrown by the method.
-     */
+	/**
+	 *  Prints trace info on the invocation return value.
+	 *
+	 *  @param invocation The invocation.
+	 *  @param returnValue The value returned from the method.
+	 */
 
-    public void onException( XmlRpcInvocation invocation, Throwable exception )
-    {
-        StringBuffer message = new StringBuffer( 192 );
+	public Object after( XmlRpcInvocation invocation, Object returnValue ) {
+		StringBuffer message = new StringBuffer( 192 );
 
-        message.append( invocation.getInvocationId() )
-               .append( ": " )
-               .append( exception.getMessage() );
-        
-        if ( servletContext != null )
-        {
-            servletContext.log( message.toString(), exception );
-        }
-        else
-        {
-            if ( exception.getCause() != null )
-            {
-                message.append( exception.getCause().getMessage() );
-            }
-            
-            System.out.println( message.toString() );
+		message.append( invocation.getInvocationId() )
+		.append( ": " )
+		.append( returnValue );
 
-        }
-    }
-    
-    
-    /** The servlet context that logging will be performed over. */
-    private ServletContext servletContext;
+		if ( servletContext != null ) {
+			servletContext.log( message.toString() );
+		} else {
+			System.out.println( message.toString() );
+		}
+
+		return returnValue;
+	}
+
+
+	/**
+	 *  Prints trace info on the invocation exception.
+	 *
+	 *  @param invocation The invocation.
+	 *  @param exception The exception thrown by the method.
+	 */
+
+	public void onException( XmlRpcInvocation invocation, Throwable exception ) {
+		StringBuffer message = new StringBuffer( 192 );
+
+		message.append( invocation.getInvocationId() )
+		.append( ": " )
+		.append( exception.getMessage() );
+
+		if ( servletContext != null ) {
+			servletContext.log( message.toString(), exception );
+		} else {
+			if ( exception.getCause() != null ) {
+				message.append( exception.getCause().getMessage() );
+			}
+
+			System.out.println( message.toString() );
+
+		}
+	}
+
+
+	/** The servlet context that logging will be performed over. */
+	private ServletContext servletContext;
 }

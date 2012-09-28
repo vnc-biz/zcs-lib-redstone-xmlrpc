@@ -34,193 +34,180 @@ import java.util.Date;
  *  <pre>
  *  boolean boolean = myList.getStruct( 0 ).getBoolean( "someBoolean" );</pre>
  *  </pre>
- *  
+ *
  *  @author Greger Olsson
  */
 
-public class XmlRpcArray extends ArrayList
-{
-    /**
-     *  Returns the String at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not a String.
-     */
+public class XmlRpcArray extends ArrayList {
+	/**
+	 *  Returns the String at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not a String.
+	 */
 
-    public String getString( int index )
-    {
-        return ( String ) get( index );
-    }
+	public String getString( int index ) {
+		return ( String ) get( index );
+	}
 
 
-    /**
-     *  Returns the boolean at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not a Boolean.
-     */
+	/**
+	 *  Returns the boolean at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not a Boolean.
+	 */
 
-    public boolean getBoolean( int index )
-    {
-        return ( ( Boolean ) get( index ) ).booleanValue();
-    }
-
-
-    /**
-     *  Returns the Boolean wrapper at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not a Boolean.
-     */
-
-    public Boolean getBooleanWrapper( int index )
-    {
-        return ( Boolean ) get( index );
-    }
+	public boolean getBoolean( int index ) {
+		return ( ( Boolean ) get( index ) ).booleanValue();
+	}
 
 
-    /**
-     *  Returns the integer at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not an Integer.
-     */
+	/**
+	 *  Returns the Boolean wrapper at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not a Boolean.
+	 */
 
-    public int getInteger( int index )
-    {
-        return ( ( Integer ) get( index ) ).intValue();
-    }
-
-
-    /**
-     *  Returns the Integer wrapper at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not a Integer.
-     */
-
-    public Integer getIntegerWrapper( int index )
-    {
-        return ( Integer ) get( index );
-    }
+	public Boolean getBooleanWrapper( int index ) {
+		return ( Boolean ) get( index );
+	}
 
 
-    /**
-     *  Returns the Double at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not a Double.
-     */
+	/**
+	 *  Returns the integer at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not an Integer.
+	 */
 
-    public double getDouble( int index )
-    {
-        return ( ( Double ) get( index ) ).doubleValue();
-    }
-
-
-    /**
-     *  Returns the Double wrapper at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not a Double.
-     */
-
-    public Double getDoubleWrapper( int index )
-    {
-        return ( Double ) get( index );
-    }
+	public int getInteger( int index ) {
+		return ( ( Integer ) get( index ) ).intValue();
+	}
 
 
-    /**
-     *  Returns the Array at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not an Array.
-     */
+	/**
+	 *  Returns the Integer wrapper at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not a Integer.
+	 */
 
-    public XmlRpcArray getArray( int index )
-    {
-        return ( XmlRpcArray ) get( index );
-    }
-
-
-    /**
-     *  Returns the Struct at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not a Struct.
-     */
-
-    public XmlRpcStruct getStruct( int index )
-    {
-        return ( XmlRpcStruct ) get( index );
-    }
+	public Integer getIntegerWrapper( int index ) {
+		return ( Integer ) get( index );
+	}
 
 
-    /**
-     *  Returns the Date at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not a Date.
-     */
+	/**
+	 *  Returns the Double at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not a Double.
+	 */
 
-    public Date getDate( int index )
-    {
-        return ( Date ) get( index );
-    }
-
-
-    /**
-     *  Returns the byte[] at the given index in the array.
-     *
-     *  @param index The index into the array to extract the value from.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not a byte[].
-     */
-
-    public byte[] getBinary( int index )
-    {
-        return ( byte[] ) get( index );
-    }
+	public double getDouble( int index ) {
+		return ( ( Double ) get( index ) ).doubleValue();
+	}
 
 
-    /**
-     *  Returns the byte[] with at the given index in the Array, as an
-     *  input stream (currently, a java.io.ByteArrayInputStream).
-     *
-     *  @param index The index of the value to extract.
-     *
-     *  @throws ArrayOutOfBoundsException if index > size() - 1.
-     *  @throws ClassCastException if the value at the given index is not a byte[].
-     */
+	/**
+	 *  Returns the Double wrapper at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not a Double.
+	 */
 
-    public InputStream getBinaryAsStream( int index )
-    {
-        return new ByteArrayInputStream( ( byte[] ) get( index ) );
-    }
+	public Double getDoubleWrapper( int index ) {
+		return ( Double ) get( index );
+	}
 
-    
-    /** Serial version UID. */
-    private static final long serialVersionUID = 3256446889107863860L;
+
+	/**
+	 *  Returns the Array at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not an Array.
+	 */
+
+	public XmlRpcArray getArray( int index ) {
+		return ( XmlRpcArray ) get( index );
+	}
+
+
+	/**
+	 *  Returns the Struct at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not a Struct.
+	 */
+
+	public XmlRpcStruct getStruct( int index ) {
+		return ( XmlRpcStruct ) get( index );
+	}
+
+
+	/**
+	 *  Returns the Date at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not a Date.
+	 */
+
+	public Date getDate( int index ) {
+		return ( Date ) get( index );
+	}
+
+
+	/**
+	 *  Returns the byte[] at the given index in the array.
+	 *
+	 *  @param index The index into the array to extract the value from.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not a byte[].
+	 */
+
+	public byte[] getBinary( int index ) {
+		return ( byte[] ) get( index );
+	}
+
+
+	/**
+	 *  Returns the byte[] with at the given index in the Array, as an
+	 *  input stream (currently, a java.io.ByteArrayInputStream).
+	 *
+	 *  @param index The index of the value to extract.
+	 *
+	 *  @throws ArrayOutOfBoundsException if index > size() - 1.
+	 *  @throws ClassCastException if the value at the given index is not a byte[].
+	 */
+
+	public InputStream getBinaryAsStream( int index ) {
+		return new ByteArrayInputStream( ( byte[] ) get( index ) );
+	}
+
+
+	/** Serial version UID. */
+	private static final long serialVersionUID = 3256446889107863860L;
 }

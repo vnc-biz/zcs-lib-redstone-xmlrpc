@@ -25,32 +25,27 @@ import java.util.ResourceBundle;
  *  @author Greger Olsson
  */
 
-public class XmlRpcMessages
-{
-    /**
-     *  Returns a message from the resource bundle corresponding to the given key.
-     * 
-     *  @param key The message key.
-     *  @return The message corresponding to the message key.
-     *  @throws MissingResourceException If the message is not found.
-     */
+public class XmlRpcMessages {
+	/**
+	 *  Returns a message from the resource bundle corresponding to the given key.
+	 *
+	 *  @param key The message key.
+	 *  @return The message corresponding to the message key.
+	 *  @throws MissingResourceException If the message is not found.
+	 */
 
-    public static String getString( String key )
-    {
-        try
-        {
-            return RESOURCE_BUNDLE.getString( key );
-        }
-        catch ( MissingResourceException e )
-        {
-            return '!' + key + '!';
-        }
-    }
-    
-    
-    /** <describe> */
-    private static final String BUNDLE_NAME = "redstone.xmlrpc.XmlRpcMessages";
+	public static String getString( String key ) {
+		try {
+			return RESOURCE_BUNDLE.getString( key );
+		} catch ( MissingResourceException e ) {
+			return '!' + key + '!';
+		}
+	}
 
-    /** <describe> */
-    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( BUNDLE_NAME );
+
+	/** <describe> */
+	private static final String BUNDLE_NAME = "redstone.xmlrpc.XmlRpcMessages";
+
+	/** <describe> */
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( BUNDLE_NAME );
 }

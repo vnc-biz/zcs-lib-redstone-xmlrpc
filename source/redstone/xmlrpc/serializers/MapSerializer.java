@@ -34,52 +34,48 @@ import redstone.xmlrpc.XmlRpcSerializer;
  *  @author Greger Olsson
  */
 
-public class MapSerializer implements XmlRpcCustomSerializer
-{
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
-     */
-    
-    public Class getSupportedClass()
-    {
-        return Map.class;
-    }
+public class MapSerializer implements XmlRpcCustomSerializer {
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
+	 */
+
+	public Class getSupportedClass() {
+		return Map.class;
+	}
 
 
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
-     */
-    
-    public void serialize(
-        Object value,
-        Writer writer,
-        XmlRpcSerializer builtInSerializer )
-        throws XmlRpcException, IOException
-    {
-        writer.write( "<struct>" );
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
+	 */
 
-        Map map     = ( Map ) value;
-        Set keys    = map.keySet();
-        Iterator it = keys.iterator();
+	public void serialize(
+	    Object value,
+	    Writer writer,
+	    XmlRpcSerializer builtInSerializer )
+	throws XmlRpcException, IOException {
+		writer.write( "<struct>" );
 
-        while ( it.hasNext() )
-        {
-            Object key = it.next();
+		Map map     = ( Map ) value;
+		Set keys    = map.keySet();
+		Iterator it = keys.iterator();
 
-            writer.write( "<member><name>" );
-            writer.write( key.toString() );
-            writer.write( "</name>");
+		while ( it.hasNext() ) {
+			Object key = it.next();
 
-            // Reuse default serializing mechanism for each member.
-            // If the member is another HashMap, this will result in
-            // a recursive call to this method. If no serializer
-            // supports the member type, an XmlRpcException will be thrown.
+			writer.write( "<member><name>" );
+			writer.write( key.toString() );
+			writer.write( "</name>");
 
-            builtInSerializer.serialize( map.get( key ), writer );
+			// Reuse default serializing mechanism for each member.
+			// If the member is another HashMap, this will result in
+			// a recursive call to this method. If no serializer
+			// supports the member type, an XmlRpcException will be thrown.
 
-            writer.write( "</member>" );
-        }
+			builtInSerializer.serialize( map.get( key ), writer );
 
-        writer.write( "</struct>" );
-    }
+			writer.write( "</member>" );
+		}
+
+		writer.write( "</struct>" );
+	}
 }

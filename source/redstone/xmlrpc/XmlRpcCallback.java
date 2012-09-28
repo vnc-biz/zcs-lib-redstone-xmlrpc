@@ -24,36 +24,35 @@ package redstone.xmlrpc;
  *  @author Greger Olsson
  */
 
-public interface XmlRpcCallback
-{
-    /**
-     *  Called by the XmlRpcClient when a response was received from the server.
-     *
-     *  @param result The object containing the result value.
-     */
+public interface XmlRpcCallback {
+	/**
+	 *  Called by the XmlRpcClient when a response was received from the server.
+	 *
+	 *  @param result The object containing the result value.
+	 */
 
-    public void onResult( Object result );
-
-
-    /**
-     *  Called by the XmlRpcClient when a fault response was received from the server.
-     *
-     *  @param faultCode The error code reported by the XML-RPC service.
-     *
-     *  @param faultMessage The error message reported by the XML-RPC service.
-     */
-
-    public void onFault( int faultCode, String faultMessage );
+	public void onResult( Object result );
 
 
-    /**
-     *  Called by the XmlRpcClient when an exception was raised during the call. This
-     *  only includes exceptions occurring locally. Remote exceptions are transported as
-     *  XML-RPC faults and are reported through the onFault() callback.
-     *
-     *  @param exception The local exception which can be the result of network problems,
-     *                   or problems with the XML payload and serialization.
-     */
+	/**
+	 *  Called by the XmlRpcClient when a fault response was received from the server.
+	 *
+	 *  @param faultCode The error code reported by the XML-RPC service.
+	 *
+	 *  @param faultMessage The error message reported by the XML-RPC service.
+	 */
 
-    public void onException( XmlRpcException exception );
+	public void onFault( int faultCode, String faultMessage );
+
+
+	/**
+	 *  Called by the XmlRpcClient when an exception was raised during the call. This
+	 *  only includes exceptions occurring locally. Remote exceptions are transported as
+	 *  XML-RPC faults and are reported through the onFault() callback.
+	 *
+	 *  @param exception The local exception which can be the result of network problems,
+	 *                   or problems with the XML payload and serialization.
+	 */
+
+	public void onException( XmlRpcException exception );
 }

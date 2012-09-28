@@ -30,59 +30,51 @@ import redstone.xmlrpc.XmlRpcSerializer;
  *  Serializes any Java object using Introspection to learn which properties that
  *  the object exposes. Note: this code is poorly tested. Use at your own risk.
  *  It does *not* support circular references; only directed graphs are supported.
- *  
+ *
  *  @author Greger Olsson
  */
 
-public class IntrospectingSerializer implements XmlRpcCustomSerializer
-{
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
-     */
-    
-    public Class getSupportedClass()
-    {
-        return Object.class;
-    }
+public class IntrospectingSerializer implements XmlRpcCustomSerializer {
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#getSupportedClass()
+	 */
+
+	public Class getSupportedClass() {
+		return Object.class;
+	}
 
 
-    /*  (Documentation inherited)
-     *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
-     */
-    
-    public void serialize(
-        Object value,
-        Writer writer,
-        XmlRpcSerializer builtInSerializer )
-        throws XmlRpcException, IOException
-    {
-        writer.write( "<struct>" );
+	/*  (Documentation inherited)
+	 *  @see redstone.xmlrpc.XmlRpcCustomSerializer#serialize(java.lang.Object, java.io.Writer, redstone.xmlrpc.XmlRpcSerializer)
+	 */
 
-        try
-        {
-            BeanInfo beanInfo = Introspector.getBeanInfo( value.getClass(), java.lang.Object.class );
-            PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();
-    
-            for ( int i = 0; i < descriptors.length; ++i )
-            {
-                Object propertyValue = descriptors[ i ].getReadMethod().invoke( value, ( Object[] ) null );
+	public void serialize(
+	    Object value,
+	    Writer writer,
+	    XmlRpcSerializer builtInSerializer )
+	throws XmlRpcException, IOException {
+		writer.write( "<struct>" );
 
-                if ( propertyValue != null )
-                {
-                    writer.write( "<member><name>" );
-                    writer.write( descriptors[ i ].getDisplayName() );
-                    writer.write( "</name>" );
-        
-                    builtInSerializer.serialize( propertyValue, writer );
-                    writer.write( "</member>" );
-                }
-            }
-        }
-        catch( java.lang.Exception e )
-        {
-            throw new XmlRpcException( XmlRpcMessages.getString( "IntrospectingSerializer.SerializationError" ), e );
-        }
+		try {
+			BeanInfo beanInfo = Introspector.getBeanInfo( value.getClass(), java.lang.Object.class );
+			PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();
 
-        writer.write( "</struct>" );
-    }
+			for ( int i = 0; i < descriptors.length; ++i ) {
+				Object propertyValue = descriptors[ i ].getReadMethod().invoke( value, ( Object[] ) null );
+
+				if ( propertyValue != null ) {
+					writer.write( "<member><name>" );
+					writer.write( descriptors[ i ].getDisplayName() );
+					writer.write( "</name>" );
+
+					builtInSerializer.serialize( propertyValue, writer );
+					writer.write( "</member>" );
+				}
+			}
+		} catch( java.lang.Exception e ) {
+			throw new XmlRpcException( XmlRpcMessages.getString( "IntrospectingSerializer.SerializationError" ), e );
+		}
+
+		writer.write( "</struct>" );
+	}
 }
