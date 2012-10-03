@@ -1,4 +1,4 @@
-VERSION=1.1.1.2
+VERSION=1.1.1.3
 PACKAGE=zcs-lib-redstone-xmlrpc
 MAINTAINER=Enrico Weigelt <enrico.weigelt@vnc.biz>
 SECTION=free/zcs-libs
