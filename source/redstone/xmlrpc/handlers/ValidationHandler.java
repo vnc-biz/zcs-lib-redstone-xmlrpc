@@ -174,7 +174,6 @@ public class ValidationHandler extends ReflectiveInvocationHandler {
 			result += ( ( Integer ) struct.get( "larry" ) ).intValue();
 			result += ( ( Integer ) struct.get( "curly" ) ).intValue();
 		} catch ( Exception e ) {
-			e.printStackTrace();
 		}
 
 		return result;
